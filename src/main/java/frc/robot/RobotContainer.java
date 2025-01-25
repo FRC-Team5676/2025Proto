@@ -90,7 +90,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         /* Run the path selected from the auto chooser */
-        return new PathPlannerAuto("New Auto");
+        return new PathPlannerAuto("Auto - 1");
         //  return autoChooser.getSelected();
     }
 }
