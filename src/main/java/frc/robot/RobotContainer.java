@@ -88,8 +88,8 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        operator.b().onTrue(new InstantCommand(lowerArm::moveToFarPosition));
-        operator.x().onTrue(new InstantCommand(lowerArm::moveToBackPosition));
+        //operator.b().onTrue(new InstantCommand(lowerArm::moveToFarPosition));
+        //operator.x().onTrue(new InstantCommand(lowerArm::moveToBackPosition));
 
         lowerArm.setDefaultCommand(new MoveRotateArmCommand(lowerArm, operator));
 

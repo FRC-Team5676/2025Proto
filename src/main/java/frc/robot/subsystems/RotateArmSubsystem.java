@@ -14,7 +14,7 @@ public class RotateArmSubsystem extends SubsystemBase {
 
   public double rotations;
 
-  private final int m_lowerArmCanId = 51;
+  private final int m_lowerArmCanId = 52;
 
   private final RelativeEncoder m_driveEncoder;
   private final SparkMax m_driveMotor;
