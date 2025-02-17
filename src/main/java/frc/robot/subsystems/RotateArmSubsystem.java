@@ -4,12 +4,13 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.ShuffleboardContent;
 
-public class LowerArmSubsystem extends SubsystemBase {
+public class RotateArmSubsystem extends SubsystemBase {
 
   public double rotations;
 
@@ -22,7 +23,7 @@ public class LowerArmSubsystem extends SubsystemBase {
   private final double minRotations = -20;
   private final double maxRotations = 90;
 
-  public LowerArmSubsystem() {
+  public RotateArmSubsystem() {
     // Drive Motor setup
     m_driveMotor = new SparkMax(m_lowerArmCanId, MotorType.kBrushless);
 
@@ -30,6 +31,12 @@ public class LowerArmSubsystem extends SubsystemBase {
     m_driveEncoder = m_driveMotor.getEncoder();
 
     m_driveController = m_driveMotor.getClosedLoopController();
+    SparkMaxConfig config = new SparkMaxConfig();
+    config.closedLoop
+    .p(0.01)
+    .i(0)
+    .d(0)
+    .outputRange(-1, 1);
 
     ShuffleboardContent.initLowerArm(this);
   }

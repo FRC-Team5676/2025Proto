@@ -7,7 +7,7 @@ package frc.robot.utils;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.robot.subsystems.LowerArmSubsystem;
+import frc.robot.subsystems.RotateArmSubsystem;
 
 /** Add your docs here. */
 public class ShuffleboardContent {
@@ -18,7 +18,7 @@ public class ShuffleboardContent {
 
         }
 
-        public static void initLowerArm(LowerArmSubsystem drive) {
+        public static void initLowerArm(RotateArmSubsystem drive) {
                 ShuffleboardTab drLayout1 = Shuffleboard.getTab("Arms");
 
                 drLayout1.addNumber("Lower Arm Angle", () -> drive.getPosition())

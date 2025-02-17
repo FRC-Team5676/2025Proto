@@ -1,17 +1,16 @@
 package frc.robot.commands.arms;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.controllers.xbox;
-import frc.robot.subsystems.LowerArmSubsystem;
+import frc.robot.subsystems.RotateArmSubsystem;
 
-public class MoveLowerArmCommand extends CommandBase {
+public class MoveRotateArmCommand extends Command {
 
-    private final LowerArmSubsystem m_controlArm;
+    private final RotateArmSubsystem m_controlArm;
     private final CommandXboxController m_controller;
 
     /** Driver control */
-    public MoveLowerArmCommand(LowerArmSubsystem controlArm, CommandXboxController controller) {
+    public MoveRotateArmCommand(RotateArmSubsystem controlArm, CommandXboxController controller) {
         m_controlArm = controlArm;
         m_controller = controller;
 
