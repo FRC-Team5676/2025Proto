@@ -24,7 +24,7 @@ public class ShuffleboardContent {
                 drLayout1.addNumber("Lower Arm Angle", () -> drive.getPosition())
                         .withPosition(9, 0)
                         .withSize(8, 1);
-                drLayout1.addNumber("Lower Current Rotations", () -> drive.rotations)
+                drLayout1.addNumber("Lower Current Rotations", () -> drive.m_positionRadians)
                         .withPosition(9, 3)
                         .withSize(8, 1);
                 drLayout1.addNumber("Lower Min Rotations", () -> drive.getMinRotations())
