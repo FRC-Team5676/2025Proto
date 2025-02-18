@@ -1,18 +1,25 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.ShuffleboardContent;
 
 public class RotateArmSubsystem extends SubsystemBase {
 
-  public double rotations;
+  public double m_positionRadians;
+  public static final double kGearRatio = 100 / 1 * 46 / 14;
+  public static final double kIntakeArmEncoderPositionFactor = (2 * Math.PI) / kGearRatio;
 
   private final int m_lowerArmCanId = 52;
 
@@ -20,8 +27,8 @@ public class RotateArmSubsystem extends SubsystemBase {
   private final SparkMax m_driveMotor;
   private final SparkClosedLoopController m_driveController;
 
-  private final double minRotations = -20;
-  private final double maxRotations = 90;
+  private final double minRotations = Units.degreesToRadians(-20);
+  private final double maxRotations = Units.degreesToRadians(90);
 
   public RotateArmSubsystem() {
     // Drive Motor setup
@@ -31,12 +38,17 @@ public class RotateArmSubsystem extends SubsystemBase {
     m_driveEncoder = m_driveMotor.getEncoder();
 
     m_driveController = m_driveMotor.getClosedLoopController();
+
     SparkMaxConfig config = new SparkMaxConfig();
     config.closedLoop
-    .p(0.01)
+    .p(1)
     .i(0)
     .d(0)
     .outputRange(-1, 1);
+    config.encoder.positionConversionFactor(kIntakeArmEncoderPositionFactor);
+
+    m_driveMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_positionRadians = m_driveEncoder.getPosition();
 
     ShuffleboardContent.initLowerArm(this);
   }
@@ -78,8 +90,9 @@ public class RotateArmSubsystem extends SubsystemBase {
   }
 
   public void driveArm(double throttle) {
-    throttle = -throttle;
-    rotations += throttle;
+    if (Math.abs(throttle) > 0.05) {
+      m_positionRadians += Units.degreesToRadians(throttle * 0.5);
+    }
     setReferencePeriodic();
   }
 
@@ -88,11 +101,11 @@ public class RotateArmSubsystem extends SubsystemBase {
   }
 
   public void setReferenceValue(double rotation) {
-    rotations = rotation;
+    m_positionRadians = Units.degreesToRadians(rotation);
   }
 
   public void setReferencePeriodic() {
-    rotations = MathUtil.clamp(rotations, minRotations, maxRotations);
-    m_driveController.setReference(rotations, SparkMax.ControlType.kPosition);
+    m_positionRadians = MathUtil.clamp(m_positionRadians, minRotations, maxRotations);
+    m_driveController.setReference(m_positionRadians, ControlType.kPosition);
   }
 }
