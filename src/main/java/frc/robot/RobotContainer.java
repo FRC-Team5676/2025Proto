@@ -19,8 +19,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.arms.MoveBallScrewCommand;
 import frc.robot.commands.arms.MoveRotateArmCommand;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.BallScrewSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.RotateArmSubsystem;
 
@@ -30,6 +32,7 @@ public class RobotContainer {
                                                                                       // max angular velocity
 
     private final RotateArmSubsystem lowerArm = new RotateArmSubsystem();
+    private final BallScrewSubsystem ballScrew = new BallScrewSubsystem();
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -92,6 +95,7 @@ public class RobotContainer {
         //operator.x().onTrue(new InstantCommand(lowerArm::moveToBackPosition));
 
         lowerArm.setDefaultCommand(new MoveRotateArmCommand(lowerArm, operator));
+        ballScrew.setDefaultCommand(new MoveBallScrewCommand(ballScrew, operator));
 
     }
 

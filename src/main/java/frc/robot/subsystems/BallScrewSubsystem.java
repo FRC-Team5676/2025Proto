@@ -15,24 +15,24 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.ShuffleboardContent;
 
-public class RotateArmSubsystem extends SubsystemBase {
+public class BallScrewSubsystem extends SubsystemBase {
 
-  public double m_positionRadians;
-  public static final double kGearRatio = 100 / 1 * 46 / 14;
-  public static final double kIntakeArmEncoderPositionFactor = (2 * Math.PI) / kGearRatio;
+  public double m_positionInches;
+  public static final double kGearRatio = 5 / 1;
+  public static final double kPositionFactor = (2 * Math.PI) * 0.1 / kGearRatio;
 
-  private final int m_lowerArmCanId = 52;
+  private final int m_canId = 50;
 
   private final RelativeEncoder m_driveEncoder;
   private final SparkMax m_driveMotor;
   private final SparkClosedLoopController m_driveController;
 
-  private final double minRotations = Units.degreesToRadians(-180);
-  private final double maxRotations = Units.degreesToRadians(180);
+  private final double minDistance = Units.degreesToRadians(-180);
+  private final double maxDistance = Units.degreesToRadians(180);
 
-  public RotateArmSubsystem() {
+  public BallScrewSubsystem() {
     // Drive Motor setup
-    m_driveMotor = new SparkMax(m_lowerArmCanId, MotorType.kBrushless);
+    m_driveMotor = new SparkMax(m_canId, MotorType.kBrushless);
 
     // drive encoder setup
     m_driveEncoder = m_driveMotor.getEncoder();
@@ -45,12 +45,12 @@ public class RotateArmSubsystem extends SubsystemBase {
     .i(0)
     .d(0)
     .outputRange(-1, 1);
-    config.encoder.positionConversionFactor(kIntakeArmEncoderPositionFactor);
+    config.encoder.positionConversionFactor(kPositionFactor);
 
     m_driveMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    m_positionRadians = m_driveEncoder.getPosition();
+    m_positionInches = m_driveEncoder.getPosition();
 
-    ShuffleboardContent.initLowerArm(this);
+    ShuffleboardContent.initBallScrew(this);
   }
 
   @Override
@@ -63,7 +63,7 @@ public class RotateArmSubsystem extends SubsystemBase {
   }
 
   public void moveToFarPosition() {
-    setReferenceValue(maxRotations);
+    setReferenceValue(maxDistance);
     setReferencePeriodic();
   }
 
@@ -77,12 +77,12 @@ public class RotateArmSubsystem extends SubsystemBase {
     setReferencePeriodic();
   }
 
-  public double getMinRotations() {
-    return minRotations;
+  public double getMinDistance() {
+    return minDistance;
   }
 
-  public double getMaxRotations() {
-    return maxRotations;
+  public double getMaxDistance() {
+    return maxDistance;
   }
 
   public double getPosition() {
@@ -91,7 +91,7 @@ public class RotateArmSubsystem extends SubsystemBase {
 
   public void driveArm(double throttle) {
     if (Math.abs(throttle) > 0.05) {
-      m_positionRadians += Units.degreesToRadians(throttle);
+      m_positionInches += throttle * 0.125;
     }
     setReferencePeriodic();
   }
@@ -100,12 +100,12 @@ public class RotateArmSubsystem extends SubsystemBase {
     m_driveMotor.set(0);
   }
 
-  public void setReferenceValue(double rotation) {
-    m_positionRadians = Units.degreesToRadians(rotation);
+  public void setReferenceValue(double distance) {
+    m_positionInches = distance;
   }
 
   public void setReferencePeriodic() {
-    m_positionRadians = MathUtil.clamp(m_positionRadians, minRotations, maxRotations);
-    m_driveController.setReference(m_positionRadians, ControlType.kPosition);
+    m_positionInches = MathUtil.clamp(m_positionInches, minDistance, maxDistance);
+    m_driveController.setReference(m_positionInches, ControlType.kPosition);
   }
 }

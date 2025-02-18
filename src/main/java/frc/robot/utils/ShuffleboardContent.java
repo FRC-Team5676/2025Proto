@@ -7,6 +7,7 @@ package frc.robot.utils;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.subsystems.BallScrewSubsystem;
 import frc.robot.subsystems.RotateArmSubsystem;
 
 /** Add your docs here. */
@@ -31,6 +32,23 @@ public class ShuffleboardContent {
                         .withPosition(9, 6)
                         .withSize(8, 1);
                 drLayout1.addNumber("Lower Max Rotations", () -> drive.getMaxRotations())
+                        .withPosition(9, 9)
+                        .withSize(8, 1);
+        }
+
+        public static void initBallScrew(BallScrewSubsystem drive) {
+                ShuffleboardTab drLayout1 = Shuffleboard.getTab("Arms");
+
+                drLayout1.addNumber("Lower Arm Angle", () -> drive.getPosition())
+                        .withPosition(9, 0)
+                        .withSize(8, 1);
+                drLayout1.addNumber("Lower Current Rotations", () -> drive.m_positionInches)
+                        .withPosition(9, 3)
+                        .withSize(8, 1);
+                drLayout1.addNumber("Lower Min Rotations", () -> drive.getMinDistance())
+                        .withPosition(9, 6)
+                        .withSize(8, 1);
+                drLayout1.addNumber("Lower Max Rotations", () -> drive.getMaxDistance())
                         .withPosition(9, 9)
                         .withSize(8, 1);
         }
