@@ -27,8 +27,8 @@ public class RotateArmSubsystem extends SubsystemBase {
   private final SparkMax m_driveMotor;
   private final SparkClosedLoopController m_driveController;
 
-  private final double minRotations = Units.degreesToRadians(-20);
-  private final double maxRotations = Units.degreesToRadians(90);
+  private final double minRotations = Units.degreesToRadians(-180);
+  private final double maxRotations = Units.degreesToRadians(180);
 
   public RotateArmSubsystem() {
     // Drive Motor setup
@@ -41,7 +41,7 @@ public class RotateArmSubsystem extends SubsystemBase {
 
     SparkMaxConfig config = new SparkMaxConfig();
     config.closedLoop
-    .p(1)
+    .p(1.5)
     .i(0)
     .d(0)
     .outputRange(-1, 1);
@@ -73,7 +73,7 @@ public class RotateArmSubsystem extends SubsystemBase {
   }
 
   public void moveToBackPosition() {
-    setReferenceValue(-20);
+    setReferenceValue(0);
     setReferencePeriodic();
   }
 
