@@ -86,7 +86,7 @@ public class BallScrewSubsystem extends SubsystemBase {
 
   public void driveArm(double throttle) {
     if (Math.abs(throttle) > 0.05) {
-      m_positionInches += throttle * 1000;
+      m_positionInches += throttle * 10000;
     }
     setReferencePeriodic();
   }
