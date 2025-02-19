@@ -24,34 +24,34 @@ public class ShuffleboardContent {
                 ShuffleboardTab drLayout1 = Shuffleboard.getTab("Rotate Arm");
 
                 drLayout1.addNumber("Angle", () -> Units.radiansToDegrees(drive.getPosition()))
-                        .withPosition(1, 0)
-                        .withSize(3, 1);
+                        .withPosition(1, 1)
+                        .withSize(2, 1);
                 drLayout1.addNumber("Target Angle", () -> Units.radiansToDegrees(drive.m_positionRadians))
-                        .withPosition(1, 3)
-                        .withSize(3, 1);
+                        .withPosition(1, 2)
+                        .withSize(2, 1);
                 drLayout1.addNumber("Min Angle", () -> Units.radiansToDegrees(drive.getMinRotations()))
-                        .withPosition(1, 6)
-                        .withSize(3, 1);
+                        .withPosition(1, 3)
+                        .withSize(2, 1);
                 drLayout1.addNumber("Max Angle", () -> Units.radiansToDegrees(drive.getMaxRotations()))
-                        .withPosition(1, 9)
-                        .withSize(3, 1);
+                        .withPosition(1, 4)
+                        .withSize(2, 1);
         }
 
         public static void initBallScrew(BallScrewSubsystem drive) {
                 ShuffleboardTab drLayout1 = Shuffleboard.getTab("Ball Screw");
 
                 drLayout1.addNumber("Distance", () -> drive.getPosition())
-                        .withPosition(1, 0)
-                        .withSize(3, 1);
+                        .withPosition(1, 1)
+                        .withSize(2, 1);
                 drLayout1.addNumber("Target Distance", () -> drive.m_positionInches)
-                        .withPosition(1, 3)
-                        .withSize(3, 1);
+                        .withPosition(1, 2)
+                        .withSize(2, 1);
                 drLayout1.addNumber("Min Distance", () -> drive.getMinDistance())
-                        .withPosition(1, 6)
-                        .withSize(3, 1);
+                        .withPosition(1, 3)
+                        .withSize(2, 1);
                 drLayout1.addNumber("Max Distance", () -> drive.getMaxDistance())
-                        .withPosition(1, 9)
-                        .withSize(3, 1);
+                        .withPosition(1, 4)
+                        .withSize(2, 1);
         }
 
 }
