@@ -40,10 +40,10 @@ public class LinearArmSubsystem extends SubsystemBase {
 
     SparkMaxConfig config = new SparkMaxConfig();
     config.closedLoop
-    .p(1)
+    .p(0.5)
     .i(0)
     .d(0)
-    .outputRange(-1, 1);
+    .outputRange(-0.3, 0.3);
     config.encoder.positionConversionFactor(kIntakeArmEncoderPositionFactor);
 
     m_driveMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
