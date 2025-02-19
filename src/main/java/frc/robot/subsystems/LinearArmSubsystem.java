@@ -67,7 +67,7 @@ public class LinearArmSubsystem extends SubsystemBase {
   }
 
   public void moveToMidPosition() {
-    setReferenceValue(22);
+    setReferenceValue(-360);
     setReferencePeriodic();
   }
 
