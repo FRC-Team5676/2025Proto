@@ -23,7 +23,7 @@ import frc.robot.commands.arms.MoveBallScrewCommand;
 import frc.robot.commands.arms.MoveRotateArmCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.BallScrewSubsystem;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.RotateArmSubsystem;
 
 public class RobotContainer {
@@ -48,7 +48,7 @@ public class RobotContainer {
     private final CommandXboxController driver = new CommandXboxController(0);
     private final CommandXboxController operator = new CommandXboxController(1);
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final SwerveSubsystem drivetrain = TunerConstants.createDrivetrain();
 
     /* Path follower */
     // private final SendableChooser<Command> autoChooser;
