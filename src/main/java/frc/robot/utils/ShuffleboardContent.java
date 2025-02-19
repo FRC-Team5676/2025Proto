@@ -4,6 +4,7 @@
 
 package frc.robot.utils;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -20,37 +21,37 @@ public class ShuffleboardContent {
         }
 
         public static void initLowerArm(RotateArmSubsystem drive) {
-                ShuffleboardTab drLayout1 = Shuffleboard.getTab("Arms");
+                ShuffleboardTab drLayout1 = Shuffleboard.getTab("Rotate Arm");
 
-                drLayout1.addNumber("Lower Arm Angle", () -> drive.getPosition())
-                        .withPosition(9, 0)
-                        .withSize(8, 1);
-                drLayout1.addNumber("Lower Current Rotations", () -> drive.m_positionRadians)
-                        .withPosition(9, 3)
-                        .withSize(8, 1);
-                drLayout1.addNumber("Lower Min Rotations", () -> drive.getMinRotations())
-                        .withPosition(9, 6)
-                        .withSize(8, 1);
-                drLayout1.addNumber("Lower Max Rotations", () -> drive.getMaxRotations())
-                        .withPosition(9, 9)
-                        .withSize(8, 1);
+                drLayout1.addNumber("Angle", () -> Units.radiansToDegrees(drive.getPosition()))
+                        .withPosition(1, 0)
+                        .withSize(3, 1);
+                drLayout1.addNumber("Target Angle", () -> Units.radiansToDegrees(drive.m_positionRadians))
+                        .withPosition(1, 3)
+                        .withSize(3, 1);
+                drLayout1.addNumber("Min Angle", () -> Units.radiansToDegrees(drive.getMinRotations()))
+                        .withPosition(1, 6)
+                        .withSize(3, 1);
+                drLayout1.addNumber("Max Angle", () -> Units.radiansToDegrees(drive.getMaxRotations()))
+                        .withPosition(1, 9)
+                        .withSize(3, 1);
         }
 
         public static void initBallScrew(BallScrewSubsystem drive) {
-                ShuffleboardTab drLayout1 = Shuffleboard.getTab("Arms");
+                ShuffleboardTab drLayout1 = Shuffleboard.getTab("Ball Screw");
 
-                drLayout1.addNumber("Lower Arm Angle", () -> drive.getPosition())
-                        .withPosition(9, 0)
-                        .withSize(8, 1);
-                drLayout1.addNumber("Lower Current Rotations", () -> drive.m_positionInches)
-                        .withPosition(9, 3)
-                        .withSize(8, 1);
-                drLayout1.addNumber("Lower Min Rotations", () -> drive.getMinDistance())
-                        .withPosition(9, 6)
-                        .withSize(8, 1);
-                drLayout1.addNumber("Lower Max Rotations", () -> drive.getMaxDistance())
-                        .withPosition(9, 9)
-                        .withSize(8, 1);
+                drLayout1.addNumber("Distance", () -> drive.getPosition())
+                        .withPosition(1, 0)
+                        .withSize(3, 1);
+                drLayout1.addNumber("Target Distance", () -> drive.m_positionInches)
+                        .withPosition(1, 3)
+                        .withSize(3, 1);
+                drLayout1.addNumber("Min Distance", () -> drive.getMinDistance())
+                        .withPosition(1, 6)
+                        .withSize(3, 1);
+                drLayout1.addNumber("Max Distance", () -> drive.getMaxDistance())
+                        .withPosition(1, 9)
+                        .withSize(3, 1);
         }
 
 }
