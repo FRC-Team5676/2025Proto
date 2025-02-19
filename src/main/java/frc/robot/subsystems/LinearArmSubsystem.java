@@ -14,22 +14,22 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.ShuffleboardContent;
 
-public class RotateArmSubsystem extends SubsystemBase {
+public class LinearArmSubsystem extends SubsystemBase {
 
   public double m_positionRadians;
-  public static final double kGearRatio = 100 / 1 * 46 / 14;
+  public static final double kGearRatio = 4 / 1;
   public static final double kIntakeArmEncoderPositionFactor = (2 * Math.PI) / kGearRatio;
 
-  private final int m_lowerArmCanId = 52;
+  private final int m_lowerArmCanId = 53;
 
   private final RelativeEncoder m_driveEncoder;
   private final SparkMax m_driveMotor;
   private final SparkClosedLoopController m_driveController;
 
-  private final double minRotations = Units.degreesToRadians(-180);
-  private final double maxRotations = Units.degreesToRadians(180);
+  private final double minRotations = Units.degreesToRadians(0);
+  private final double maxRotations = Units.degreesToRadians(360);
 
-  public RotateArmSubsystem() {
+  public LinearArmSubsystem() {
     // Drive Motor setup
     m_driveMotor = new SparkMax(m_lowerArmCanId, MotorType.kBrushless);
 
@@ -40,7 +40,7 @@ public class RotateArmSubsystem extends SubsystemBase {
 
     SparkMaxConfig config = new SparkMaxConfig();
     config.closedLoop
-    .p(1.5)
+    .p(1)
     .i(0)
     .d(0)
     .outputRange(-1, 1);
@@ -49,7 +49,7 @@ public class RotateArmSubsystem extends SubsystemBase {
     m_driveMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_positionRadians = m_driveEncoder.getPosition();
 
-    ShuffleboardContent.initRotateArm(this);
+    ShuffleboardContent.initLinearArm(this);
   }
 
   @Override
@@ -72,7 +72,7 @@ public class RotateArmSubsystem extends SubsystemBase {
   }
 
   public void moveToBackPosition() {
-    setReferenceValue(0);
+    setReferenceValue(minRotations);
     setReferencePeriodic();
   }
 

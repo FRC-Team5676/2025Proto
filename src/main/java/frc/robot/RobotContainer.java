@@ -23,6 +23,7 @@ import frc.robot.commands.arms.MoveBallScrewCommand;
 import frc.robot.commands.arms.MoveRotateArmCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.BallScrewSubsystem;
+import frc.robot.subsystems.LinearArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.RotateArmSubsystem;
 
@@ -31,8 +32,9 @@ public class RobotContainer {
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
                                                                                       // max angular velocity
 
-    private final RotateArmSubsystem lowerArm = new RotateArmSubsystem();
+    private final RotateArmSubsystem rotateArm = new RotateArmSubsystem();
     private final BallScrewSubsystem ballScrew = new BallScrewSubsystem();
+    private final LinearArmSubsystem linearArm = new LinearArmSubsystem();
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -91,12 +93,14 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        //operator.b().onTrue(new InstantCommand(lowerArm::moveToFarPosition));
-        //operator.x().onTrue(new InstantCommand(lowerArm::moveToBackPosition));
+        //operator.b().onTrue(new InstantCommand(rotateArm::moveToFarPosition));
+        //operator.x().onTrue(new InstantCommand(rotateArm::moveToBackPosition));
 
-        lowerArm.setDefaultCommand(new MoveRotateArmCommand(lowerArm, operator));
+        rotateArm.setDefaultCommand(new MoveRotateArmCommand(rotateArm, operator));
         ballScrew.setDefaultCommand(new MoveBallScrewCommand(ballScrew, operator));
 
+        operator.leftBumper().onTrue(new InstantCommand(linearArm::moveToBackPosition));
+        operator.rightBumper().onTrue(new InstantCommand(linearArm::moveToFarPosition));
     }
 
     public Command getAutonomousCommand() {
