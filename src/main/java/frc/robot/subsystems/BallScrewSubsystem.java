@@ -30,7 +30,7 @@ public class BallScrewSubsystem extends SubsystemBase {
     m_driveMotor.setNeutralMode(NeutralMode.Brake);
 
     // PID Setup
-    m_driveMotor.config_kP(0, 0.7);
+    m_driveMotor.config_kP(0, 0.5);
     m_driveMotor.config_kI(0, 0);
     m_driveMotor.config_kD(0, 0);
     m_driveMotor.config_kF(0, 0);
@@ -86,7 +86,7 @@ public class BallScrewSubsystem extends SubsystemBase {
 
   public void driveArm(double throttle) {
     if (Math.abs(throttle) > 0.05) {
-      m_positionInches += throttle * 1024;
+      m_positionInches += throttle * 1000;
     }
     setReferencePeriodic();
   }
