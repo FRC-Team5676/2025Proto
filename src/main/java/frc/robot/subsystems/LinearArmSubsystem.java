@@ -40,7 +40,7 @@ public class LinearArmSubsystem extends SubsystemBase {
 
     SparkMaxConfig config = new SparkMaxConfig();
     config.closedLoop
-    .p(0.5)
+    .p(1)
     .i(0)
     .d(0)
     .outputRange(-1, 1);
