@@ -104,7 +104,7 @@ public class LinearArmSubsystem extends SubsystemBase {
   }
 
   public void setReferencePeriodic() {
-    m_positionRadians = MathUtil.clamp(m_positionRadians, minRotations, maxRotations);
+    m_positionRadians = MathUtil.clamp(m_positionRadians, maxRotations, minRotations);
     m_driveController.setReference(-1 * m_positionRadians, ControlType.kPosition);
   }
 }
