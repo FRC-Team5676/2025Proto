@@ -62,7 +62,7 @@ public class LinearArmSubsystem extends SubsystemBase {
   }
 
   public void moveToExtendedPosition() {
-    setReferenceValue(minRotations);
+    m_positionRadians = minRotations;
     setReferencePeriodic();
   }
 
@@ -72,7 +72,7 @@ public class LinearArmSubsystem extends SubsystemBase {
   }
 
   public void moveToRetractedPosition() {
-    setReferenceValue(maxRotations);
+    m_positionRadians = maxRotations;
     setReferencePeriodic();
   }
 
