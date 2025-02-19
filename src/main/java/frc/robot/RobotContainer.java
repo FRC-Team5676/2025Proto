@@ -101,8 +101,8 @@ public class RobotContainer {
         //ballScrew.setDefaultCommand(new MoveBallScrewCommand(ballScrew, operator));
         linearArm.setDefaultCommand(new MoveLinearArmCommand(linearArm, operator));
 
-        //operator.leftBumper().onTrue(new InstantCommand(linearArm::moveToBackPosition));
-        //operator.rightBumper().onTrue(new InstantCommand(linearArm::moveToFarPosition));
+        operator.leftBumper().onTrue(new InstantCommand(linearArm::moveToBackPosition));
+        operator.rightBumper().onTrue(new InstantCommand(linearArm::moveToFarPosition));
     }
 
     public Command getAutonomousCommand() {

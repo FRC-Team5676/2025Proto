@@ -26,7 +26,7 @@ public class LinearArmSubsystem extends SubsystemBase {
   private final SparkMax m_driveMotor;
   private final SparkClosedLoopController m_driveController;
 
-  private final double minRotations = Units.degreesToRadians(-360);
+  private final double minRotations = Units.degreesToRadians(-720);
   private final double maxRotations = Units.degreesToRadians(0);
 
   public LinearArmSubsystem() {
