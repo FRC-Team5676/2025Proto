@@ -27,7 +27,7 @@ public class LinearArmSubsystem extends SubsystemBase {
   private final SparkClosedLoopController m_driveController;
 
   private final double minRotations = Units.degreesToRadians(0);
-  private final double maxRotations = Units.degreesToRadians(360);
+  private final double maxRotations = Units.degreesToRadians(-360);
 
   public LinearArmSubsystem() {
     // Drive Motor setup
@@ -45,7 +45,6 @@ public class LinearArmSubsystem extends SubsystemBase {
     .d(0)
     .outputRange(-1, 1);
     config.encoder.positionConversionFactor(kIntakeArmEncoderPositionFactor);
-    config.encoder.inverted(true);
 
     m_driveMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_positionRadians = m_driveEncoder.getPosition();
