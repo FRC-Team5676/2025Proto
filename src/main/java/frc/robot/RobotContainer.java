@@ -98,7 +98,7 @@ public class RobotContainer {
         //operator.x().onTrue(new InstantCommand(rotateArm::moveToBackPosition));
 
         rotateArm.setDefaultCommand(new MoveRotateArmCommand(rotateArm, operator));
-        ballScrew.setDefaultCommand(new MoveBallScrewCommand(ballScrew, operator));
+        //ballScrew.setDefaultCommand(new MoveBallScrewCommand(ballScrew, operator));
         linearArm.setDefaultCommand(new MoveLinearArmCommand(linearArm, operator));
 
         //operator.leftBumper().onTrue(new InstantCommand(linearArm::moveToBackPosition));

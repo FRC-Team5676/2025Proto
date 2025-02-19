@@ -26,8 +26,8 @@ public class LinearArmSubsystem extends SubsystemBase {
   private final SparkMax m_driveMotor;
   private final SparkClosedLoopController m_driveController;
 
-  private final double minRotations = Units.degreesToRadians(0);
-  private final double maxRotations = Units.degreesToRadians(90);
+  private final double minRotations = Units.degreesToRadians(-360);
+  private final double maxRotations = Units.degreesToRadians(0);
 
   public LinearArmSubsystem() {
     // Drive Motor setup
@@ -40,7 +40,7 @@ public class LinearArmSubsystem extends SubsystemBase {
 
     SparkMaxConfig config = new SparkMaxConfig();
     config.closedLoop
-    .p(1)
+    .p(0.5)
     .i(0)
     .d(0)
     .outputRange(-1, 1);
@@ -62,7 +62,7 @@ public class LinearArmSubsystem extends SubsystemBase {
   }
 
   public void moveToFarPosition() {
-    setReferenceValue(maxRotations);
+    setReferenceValue(minRotations);
     setReferencePeriodic();
   }
 
@@ -72,7 +72,7 @@ public class LinearArmSubsystem extends SubsystemBase {
   }
 
   public void moveToBackPosition() {
-    setReferenceValue(minRotations);
+    setReferenceValue(maxRotations);
     setReferencePeriodic();
   }
 
@@ -90,7 +90,7 @@ public class LinearArmSubsystem extends SubsystemBase {
 
   public void driveArm(double throttle) {
     if (Math.abs(throttle) > 0.05) {
-      m_positionRadians += Units.degreesToRadians(throttle);
+      m_positionRadians += Units.degreesToRadians(throttle * 10);
     }
     setReferencePeriodic();
   }
