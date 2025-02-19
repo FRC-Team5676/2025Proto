@@ -45,6 +45,7 @@ public class LinearArmSubsystem extends SubsystemBase {
     .d(0)
     .outputRange(-1, 1);
     config.encoder.positionConversionFactor(kIntakeArmEncoderPositionFactor);
+    config.encoder.inverted(true);
 
     m_driveMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_positionRadians = m_driveEncoder.getPosition();
@@ -105,6 +106,6 @@ public class LinearArmSubsystem extends SubsystemBase {
 
   public void setReferencePeriodic() {
     m_positionRadians = MathUtil.clamp(m_positionRadians, minRotations, maxRotations);
-    m_driveController.setReference(m_positionRadians, ControlType.kPosition);
+    m_driveController.setReference(-1 * m_positionRadians, ControlType.kPosition);
   }
 }
