@@ -13,6 +13,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -101,8 +102,8 @@ public class RobotContainer {
         //ballScrew.setDefaultCommand(new MoveBallScrewCommand(ballScrew, operator));
         linearArm.setDefaultCommand(new MoveLinearArmCommand(linearArm, operator));
 
-        operator.leftBumper().onTrue(new InstantCommand(linearArm::moveToBackPosition));
-        operator.rightBumper().onTrue(new InstantCommand(linearArm::moveToFarPosition));
+        operator.button(XboxController.Button.kLeftBumper.value).onTrue(new InstantCommand(linearArm::moveToRetractedPosition));
+        operator.button(XboxController.Button.kRightBumper.value).onTrue(new InstantCommand(linearArm::moveToExtendedPosition));
     }
 
     public Command getAutonomousCommand() {

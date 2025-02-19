@@ -61,7 +61,7 @@ public class LinearArmSubsystem extends SubsystemBase {
     setReferencePeriodic();
   }
 
-  public void moveToFarPosition() {
+  public void moveToExtendedPosition() {
     setReferenceValue(minRotations);
     setReferencePeriodic();
   }
@@ -71,7 +71,7 @@ public class LinearArmSubsystem extends SubsystemBase {
     setReferencePeriodic();
   }
 
-  public void moveToBackPosition() {
+  public void moveToRetractedPosition() {
     setReferenceValue(maxRotations);
     setReferencePeriodic();
   }
