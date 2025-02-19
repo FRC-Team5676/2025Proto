@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.arms.MoveBallScrewCommand;
+import frc.robot.commands.arms.MoveLinearArmCommand;
 import frc.robot.commands.arms.MoveRotateArmCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.BallScrewSubsystem;
@@ -98,9 +99,10 @@ public class RobotContainer {
 
         rotateArm.setDefaultCommand(new MoveRotateArmCommand(rotateArm, operator));
         ballScrew.setDefaultCommand(new MoveBallScrewCommand(ballScrew, operator));
+        linearArm.setDefaultCommand(new MoveLinearArmCommand(linearArm, operator));
 
-        operator.leftBumper().onTrue(new InstantCommand(linearArm::moveToBackPosition));
-        operator.rightBumper().onTrue(new InstantCommand(linearArm::moveToFarPosition));
+        //operator.leftBumper().onTrue(new InstantCommand(linearArm::moveToBackPosition));
+        //operator.rightBumper().onTrue(new InstantCommand(linearArm::moveToFarPosition));
     }
 
     public Command getAutonomousCommand() {
