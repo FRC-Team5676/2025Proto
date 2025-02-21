@@ -59,26 +59,6 @@ public class ClimberSubsystem extends SubsystemBase {
   public void periodic() {
   }
 
-  public void moveToPosition(double position) {
-    setReferenceValue(position);
-    setReferencePeriodic();
-  }
-
-  public void moveToExtendedPosition() {
-    m_positionRadians = minRotations;
-    setReferencePeriodic();
-  }
-
-  public void moveToMidPosition() {
-    setReferenceValue(-360);
-    setReferencePeriodic();
-  }
-
-  public void moveToRetractedPosition() {
-    m_positionRadians = maxRotations;
-    setReferencePeriodic();
-  }
-
   public double getMinRotations() {
     return minRotations;
   }
@@ -96,14 +76,6 @@ public class ClimberSubsystem extends SubsystemBase {
       m_positionRadians += Units.degreesToRadians(throttle * 10);
     }
     setReferencePeriodic();
-  }
-
-  public void stop() {
-    m_driveMotor.set(0);
-  }
-
-  public void setReferenceValue(double rotation) {
-    m_positionRadians = Units.degreesToRadians(rotation);
   }
 
   public void setReferencePeriodic() {

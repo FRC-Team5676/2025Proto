@@ -12,7 +12,7 @@ import frc.robot.subsystems.BallScrewSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.LinearArmSubsystem;
 import frc.robot.subsystems.RotateArmSubsystem;
-import frc.robot.subsystems.RotateAlgae;
+import frc.robot.subsystems.RotateAlgaeSubsystem;
 
 /** Add your docs here. */
 public class ShuffleboardContent {
@@ -90,7 +90,7 @@ public class ShuffleboardContent {
                         .withPosition(1, 4)
                         .withSize(2, 1);
         }
-        public static void initRotateAlgae(RotateAlgae drive) {
+        public static void initRotateAlgae(RotateAlgaeSubsystem drive) {
                 ShuffleboardTab drLayout1 = Shuffleboard.getTab("Algae");
 
                 drLayout1.addNumber("Angle", () -> Units.radiansToDegrees(drive.getPosition()))

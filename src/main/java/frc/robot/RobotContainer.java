@@ -26,13 +26,12 @@ import frc.robot.commands.MoveClimberCommand;
 import frc.robot.commands.arms.MoveBallScrewCommand;
 import frc.robot.commands.arms.MoveLinearArmCommand;
 import frc.robot.commands.arms.MoveRotateArmCommand;
-import frc.robot.commands.RotateAlgaeCommand;
 import frc.robot.commands.WristCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.BallScrewSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.LinearArmSubsystem;
-import frc.robot.subsystems.RotateAlgae;
+import frc.robot.subsystems.RotateAlgaeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.RotateArmSubsystem;
@@ -46,21 +45,20 @@ public class RobotContainer {
     private final BallScrewSubsystem ballScrew = new BallScrewSubsystem();
     private final LinearArmSubsystem linearArm = new LinearArmSubsystem();
     private final ClimberSubsystem climber = new ClimberSubsystem();
-    private final RotateAlgae rotateAlgae = new RotateAlgae();
+    private final RotateAlgaeSubsystem rotateAlgae = new RotateAlgaeSubsystem();
     private final WristSubsystem wrist = new WristSubsystem();
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-    private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+    //private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+    //private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+    //private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController driver = new CommandXboxController(0);
+    private final CommandJoystick driver = new CommandJoystick(0);
     private final CommandXboxController operator = new CommandXboxController(1);
 
     public final SwerveSubsystem drivetrain = TunerConstants.createDrivetrain();
@@ -80,44 +78,37 @@ public class RobotContainer {
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
                 // Drivetrain will execute this command periodically
-                drivetrain.applyRequest(() -> drive.withVelocityX(-driver.getLeftY() * MaxSpeed) // Drive forward with
+                drivetrain.applyRequest(() -> drive.withVelocityX(-driver.getY() * MaxSpeed) // Drive forward with
                                                                                                  // negative Y (forward)
-                        .withVelocityY(-driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                        .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Drive counterclockwise with
+                        .withVelocityY(-driver.getX() * MaxSpeed) // Drive left with negative X (left)
+                        .withRotationalRate(-driver.getTwist() * MaxAngularRate) // Drive counterclockwise with
                                                                                   // negative X (left)
                 ));
 
-        driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        driver.b().whileTrue(drivetrain
-                .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driver.getLeftY(), -driver.getLeftX()))));
-
-        driver.pov(0).whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(0.5).withVelocityY(0)));
-        driver.pov(180).whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(-0.5).withVelocityY(0)));
-
-        // Run SysId routines when holding back/start and X/Y.
-        // Note that each routine should be run exactly once in a single log.
-        driver.back().and(driver.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        driver.back().and(driver.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        driver.start().and(driver.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        driver.start().and(driver.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-
-        // reset the field-centric heading on left bumper press
-        driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        //operator.b().onTrue(new InstantCommand(rotateArm::moveToFarPosition));
-        //operator.x().onTrue(new InstantCommand(rotateArm::moveToBackPosition));
+        // Robot centric driving
+        //driver.button(12).whileTrue(drivetrain.applyRequest(() -> point.withModuleDirection(new Rotation2d(-driver.getY(), -driver.getX()))));
 
+        // reset the field-centric heading
+        driver.button(8).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+
+        // Variable Position Commands
         rotateArm.setDefaultCommand(new MoveRotateArmCommand(rotateArm, operator));
         ballScrew.setDefaultCommand(new MoveBallScrewCommand(ballScrew, operator));
         linearArm.setDefaultCommand(new MoveLinearArmCommand(linearArm, operator));
         climber.setDefaultCommand(new MoveClimberCommand(climber, driver));
-        rotateAlgae.setDefaultCommand(new RotateAlgaeCommand(rotateAlgae, operator));
         wrist.setDefaultCommand(new WristCommand(wrist, operator));
 
+        // Linear Arm Presets
         operator.button(XboxController.Button.kLeftBumper.value).onTrue(new InstantCommand(linearArm::moveToRetractedPosition));
         operator.button(XboxController.Button.kRightBumper.value).onTrue(new InstantCommand(linearArm::moveToExtendedPosition));
+
+        // Algea
+        operator.povDown().onTrue(new InstantCommand(rotateAlgae::intakeAlgea));
+        operator.povDown().onFalse(new InstantCommand(rotateAlgae::stop));
+        driver.button(2).onTrue(new InstantCommand(rotateAlgae::shootAlgea));
+        driver.button(2).onFalse(new InstantCommand(rotateAlgae::stop));
     }
 
     public Command getAutonomousCommand() {
