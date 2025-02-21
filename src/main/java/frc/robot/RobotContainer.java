@@ -18,14 +18,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WrapperCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.MoveClimberCommand;
 import frc.robot.commands.arms.MoveBallScrewCommand;
 import frc.robot.commands.arms.MoveLinearArmCommand;
 import frc.robot.commands.arms.MoveRotateArmCommand;
+import frc.robot.commands.RotateAlgaeCommand;
+import frc.robot.commands.WristCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.BallScrewSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.LinearArmSubsystem;
+import frc.robot.subsystems.RotateAlgae;
+import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.RotateArmSubsystem;
 
@@ -37,6 +45,9 @@ public class RobotContainer {
     private final RotateArmSubsystem rotateArm = new RotateArmSubsystem();
     private final BallScrewSubsystem ballScrew = new BallScrewSubsystem();
     private final LinearArmSubsystem linearArm = new LinearArmSubsystem();
+    private final ClimberSubsystem climber = new ClimberSubsystem();
+    private final RotateAlgae rotateAlgae = new RotateAlgae();
+    private final WristSubsystem wrist = new WristSubsystem();
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -99,8 +110,11 @@ public class RobotContainer {
         //operator.x().onTrue(new InstantCommand(rotateArm::moveToBackPosition));
 
         rotateArm.setDefaultCommand(new MoveRotateArmCommand(rotateArm, operator));
-        //ballScrew.setDefaultCommand(new MoveBallScrewCommand(ballScrew, operator));
+        ballScrew.setDefaultCommand(new MoveBallScrewCommand(ballScrew, operator));
         linearArm.setDefaultCommand(new MoveLinearArmCommand(linearArm, operator));
+        climber.setDefaultCommand(new MoveClimberCommand(climber, driver));
+        rotateAlgae.setDefaultCommand(new RotateAlgaeCommand(rotateAlgae, operator));
+        wrist.setDefaultCommand(new WristCommand(wrist, operator));
 
         operator.button(XboxController.Button.kLeftBumper.value).onTrue(new InstantCommand(linearArm::moveToRetractedPosition));
         operator.button(XboxController.Button.kRightBumper.value).onTrue(new InstantCommand(linearArm::moveToExtendedPosition));

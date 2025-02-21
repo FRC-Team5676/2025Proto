@@ -20,8 +20,8 @@ public class BallScrewSubsystem extends SubsystemBase {
 
   private final WPI_TalonSRX m_driveMotor;
 
-  private final double minDistance = 700;
-  private final double maxDistance = 500000;
+  private final double minDistance = -540000;
+  private final double maxDistance = 50;
 
   public BallScrewSubsystem() {
     // Drive Motor setup
@@ -30,7 +30,7 @@ public class BallScrewSubsystem extends SubsystemBase {
     m_driveMotor.setNeutralMode(NeutralMode.Brake);
 
     // PID Setup
-    m_driveMotor.config_kP(0, 0.5);
+    m_driveMotor.config_kP(0, 0.04);
     m_driveMotor.config_kI(0, 0);
     m_driveMotor.config_kD(0, 0);
     m_driveMotor.config_kF(0, 0);
