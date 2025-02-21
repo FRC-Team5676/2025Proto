@@ -44,7 +44,7 @@ public class WristSubsystem extends SubsystemBase {
 
     SparkMaxConfig config = new SparkMaxConfig();
     config.closedLoop
-    .p(1.75)
+    .p(1)
     .i(0)
     .d(0)
     .outputRange(-1, 1);
@@ -53,7 +53,7 @@ public class WristSubsystem extends SubsystemBase {
     m_driveMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_positionRadians = m_driveEncoder.getPosition();
 
-    //ShuffleboardContent.initWrist(this);
+    ShuffleboardContent.initWrist(this);
   }
 
   @Override
@@ -62,21 +62,6 @@ public class WristSubsystem extends SubsystemBase {
 
   public void moveToPosition(double position) {
     setReferenceValue(position);
-    setReferencePeriodic();
-  }
-
-  public void moveToFarPosition() {
-    setReferenceValue(maxRotations);
-    setReferencePeriodic();
-  }
-
-  public void moveToMidPosition() {
-    setReferenceValue(22);
-    setReferencePeriodic();
-  }
-
-  public void moveToBackPosition() {
-    setReferenceValue(0);
     setReferencePeriodic();
   }
 
@@ -97,10 +82,6 @@ public class WristSubsystem extends SubsystemBase {
       m_positionRadians += Units.degreesToRadians(throttle);
     }
     setReferencePeriodic();
-  }
-
-  public void stop() {
-    m_driveMotor.set(0);
   }
 
   public void setReferenceValue(double rotation) {
