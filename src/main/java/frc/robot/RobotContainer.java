@@ -12,6 +12,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -38,6 +39,9 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.RotateArmSubsystem;
 
 public class RobotContainer {
+    private static final double kXYDeadband = 0.05;
+    private static final double kZDeadBand = 0.10;
+
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
                                                                                       // max angular velocity
@@ -51,7 +55,6 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     //private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     //private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -82,11 +85,10 @@ public class RobotContainer {
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
                 // Drivetrain will execute this command periodically
-                drivetrain.applyRequest(() -> drive.withVelocityX(-driver.getY() * MaxSpeed) // Drive forward with
-                                                                                                 // negative Y (forward)
-                        .withVelocityY(-driver.getX() * MaxSpeed) // Drive left with negative X (left)
-                        .withRotationalRate(-driver.getTwist() * MaxAngularRate) // Drive counterclockwise with
-                                                                                  // negative X (left)
+                drivetrain.applyRequest(() -> drive
+                        .withVelocityX(-(MathUtil.applyDeadband(driver.getY(), kXYDeadband) * MaxSpeed)) // Drive forward with negative Y (forward)
+                        .withVelocityY(-(MathUtil.applyDeadband(driver.getX(), kXYDeadband) * MaxSpeed)) // Drive left with negative X (left)
+                        .withRotationalRate(-(MathUtil.applyDeadband(driver.getTwist(), kZDeadBand) * MaxAngularRate)) // Drive counterclockwise with negative X (left)
                 ));
 
         drivetrain.registerTelemetry(logger::telemeterize);
