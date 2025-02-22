@@ -30,21 +30,16 @@ public class ArmMoveCommands extends Command {
     }
 
     public Command MoveAllHome() {
-
-        double timeOut = Math
-                .abs(m_ballScrew.getPosition() / (m_ballScrew.getMaxDistance() - m_ballScrew.getMinDistance())) * 2;
         return Commands.sequence(
-                new InstantCommand(() -> m_ballScrew.setReferenceValue(m_ballScrew.getMaxDistance()))
-                        .withTimeout(timeOut),
+                new InstantCommand(() -> m_ballScrew.moveToDownPosition()),
                 new InstantCommand(() -> m_wrist.setReferenceValue(0)),
-                new InstantCommand(
-                        () -> m_linearArm.setReferenceValue(Units.radiansToDegrees(m_linearArm.getMaxRotations()))),
+                new InstantCommand(() -> m_linearArm.setReferenceValue(Units.radiansToDegrees(m_linearArm.getMaxRotations()))),
                 new InstantCommand(() -> m_rotateArm.setReferenceValue(0)));
     }
 
     public Command MoveToL2() {
         return Commands.sequence(
-                new InstantCommand(() -> m_ballScrew.setReferenceValue(m_ballScrew.getMinDistance())),
+                new InstantCommand(() -> m_ballScrew.moveToUpPosition()),
                 new InstantCommand(() -> m_rotateArm.setReferenceValue(72)),
                 new InstantCommand(() -> m_linearArm.setReferenceValue(Units.radiansToDegrees(m_linearArm.getMaxRotations()))),
                 new InstantCommand(() -> m_wrist.setReferenceValue(0))

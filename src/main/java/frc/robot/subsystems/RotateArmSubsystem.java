@@ -26,8 +26,8 @@ public class RotateArmSubsystem extends SubsystemBase {
   private final SparkMax m_driveMotor;
   private final SparkClosedLoopController m_driveController;
 
-  private final double minRotations = Units.degreesToRadians(-180);
-  private final double maxRotations = Units.degreesToRadians(180);
+  private final double minRotations = Units.degreesToRadians(-270);
+  private final double maxRotations = Units.degreesToRadians(270);
 
   public RotateArmSubsystem() {
     // Drive Motor setup
