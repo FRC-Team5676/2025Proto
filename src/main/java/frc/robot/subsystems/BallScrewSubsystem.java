@@ -57,21 +57,6 @@ public class BallScrewSubsystem extends SubsystemBase {
     setReferencePeriodic();
   }
 
-  public void moveToFarPosition() {
-    setReferenceValue(maxDistance);
-    setReferencePeriodic();
-  }
-
-  public void moveToMidPosition() {
-    setReferenceValue(22);
-    setReferencePeriodic();
-  }
-
-  public void moveToBackPosition() {
-    setReferenceValue(0);
-    setReferencePeriodic();
-  }
-
   public double getMinDistance() {
     return minDistance;
   }
@@ -89,10 +74,6 @@ public class BallScrewSubsystem extends SubsystemBase {
       m_positionInches += throttle * 10000;
     }
     setReferencePeriodic();
-  }
-
-  public void stop() {
-    m_driveMotor.set(0);
   }
 
   public void setReferenceValue(double distance) {

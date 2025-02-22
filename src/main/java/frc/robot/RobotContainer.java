@@ -26,7 +26,8 @@ import frc.robot.commands.MoveClimberCommand;
 import frc.robot.commands.arms.MoveBallScrewCommand;
 import frc.robot.commands.arms.MoveLinearArmCommand;
 import frc.robot.commands.arms.MoveRotateArmCommand;
-import frc.robot.commands.WristCommand;
+import frc.robot.commands.arms.MoveToL2;
+import frc.robot.commands.arms.WristCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.BallScrewSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -103,6 +104,9 @@ public class RobotContainer {
         // Linear Arm Presets
         operator.button(XboxController.Button.kLeftBumper.value).onTrue(new InstantCommand(linearArm::moveToRetractedPosition));
         operator.button(XboxController.Button.kRightBumper.value).onTrue(new InstantCommand(linearArm::moveToExtendedPosition));
+
+        // Move to Position
+        operator.button(XboxController.Button.kY.value).onTrue(new MoveToL2(ballScrew,rotateArm,linearArm,wrist));
 
         // Algea
         operator.povDown().onTrue(new InstantCommand(rotateAlgae::intakeAlgea));
