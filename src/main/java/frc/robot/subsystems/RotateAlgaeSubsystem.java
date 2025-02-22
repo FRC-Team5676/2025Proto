@@ -51,7 +51,7 @@ public class RotateAlgaeSubsystem extends SubsystemBase {
     .p(0.5)
     .i(0)
     .d(0)
-    .outputRange(-0.75, 0.75);
+    .outputRange(-1, 1);
     config.encoder.positionConversionFactor(kIntakeArmEncoderPositionFactor);
 
     m_rotateMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -69,7 +69,7 @@ public class RotateAlgaeSubsystem extends SubsystemBase {
   public void intakeAlgea() {
     m_positionRadians = minRotations;
     setReferencePeriodic();
-    m_intakeMotor.set(0.1);
+    m_intakeMotor.set(0.12);
   }
 
   public void stop() {
