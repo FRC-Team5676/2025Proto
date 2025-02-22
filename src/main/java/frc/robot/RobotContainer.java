@@ -23,10 +23,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.MoveClimberCommand;
+import frc.robot.commands.arms.ArmMoveCommands;
 import frc.robot.commands.arms.MoveBallScrewCommand;
 import frc.robot.commands.arms.MoveLinearArmCommand;
 import frc.robot.commands.arms.MoveRotateArmCommand;
-import frc.robot.commands.arms.MoveToL2;
 import frc.robot.commands.arms.WristCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.BallScrewSubsystem;
@@ -75,6 +75,9 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
+
+        var armCommands = new ArmMoveCommands(ballScrew, rotateArm, linearArm, wrist);
+
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
@@ -105,8 +108,9 @@ public class RobotContainer {
         operator.button(XboxController.Button.kLeftBumper.value).onTrue(new InstantCommand(linearArm::moveToRetractedPosition));
         operator.button(XboxController.Button.kRightBumper.value).onTrue(new InstantCommand(linearArm::moveToExtendedPosition));
 
-        // Move to Position
-        operator.button(XboxController.Button.kY.value).onTrue(new MoveToL2(ballScrew,rotateArm,linearArm,wrist));
+        // Move Arms
+        operator.button(XboxController.Button.kX.value).onTrue(armCommands.MoveAllHome());
+        operator.button(XboxController.Button.kY.value).onTrue(armCommands.MoveToL2());
 
         // Algea
         operator.povDown().onTrue(new InstantCommand(rotateAlgae::intakeAlgea));

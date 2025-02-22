@@ -17,7 +17,7 @@ import frc.robot.utils.ShuffleboardContent;
 public class LinearArmSubsystem extends SubsystemBase {
 
   public double m_positionRadians;
-  public static final double kGearRatio = 4 / 1;
+  public static final double kGearRatio = 20 / 1;
   public static final double kIntakeArmEncoderPositionFactor = (2 * Math.PI) / kGearRatio;
 
   private final int m_lowerArmCanId = 53;
@@ -26,8 +26,8 @@ public class LinearArmSubsystem extends SubsystemBase {
   private final SparkMax m_driveMotor;
   private final SparkClosedLoopController m_driveController;
 
-  private final double minRotations = Units.degreesToRadians(-720);
-  private final double maxRotations = Units.degreesToRadians(0);
+  private final double minRotations = Units.degreesToRadians(-360);
+  private final double maxRotations = Units.degreesToRadians(360);
 
   public LinearArmSubsystem() {
     // Drive Motor setup
