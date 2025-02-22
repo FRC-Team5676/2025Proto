@@ -21,7 +21,7 @@ public class BallScrewSubsystem extends SubsystemBase {
   private final WPI_TalonSRX m_driveMotor;
 
   private final double minDistance = -540000;
-  private final double maxDistance = 50;
+  private final double maxDistance = 3380;
 
   public BallScrewSubsystem() {
     // Drive Motor setup

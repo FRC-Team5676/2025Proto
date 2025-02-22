@@ -21,7 +21,7 @@ import frc.robot.utils.ShuffleboardContent;
 public class WristSubsystem extends SubsystemBase {
 
   public double m_positionRadians;
-  public static final double kGearRatio = 1/1;
+  public static final double kGearRatio = 2/1;
   public static final double kIntakeArmEncoderPositionFactor = (2 * Math.PI) / kGearRatio;
 
   private final int m_WristCanId = 54;
@@ -44,7 +44,7 @@ public class WristSubsystem extends SubsystemBase {
 
     SparkMaxConfig config = new SparkMaxConfig();
     config.closedLoop
-    .p(0.5)
+    .p(2)
     .i(0)
     .d(0)
     .outputRange(-1, 1);
@@ -79,7 +79,7 @@ public class WristSubsystem extends SubsystemBase {
 
   public void driveArm(double throttle) {
     if (Math.abs(throttle) > 0.05) {
-      m_positionRadians += Units.degreesToRadians(throttle);
+      m_positionRadians += Units.degreesToRadians(throttle * 2);
     }
     setReferencePeriodic();
   }
