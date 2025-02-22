@@ -81,7 +81,7 @@ public class RotateAlgaeSubsystem extends SubsystemBase {
   public void shootAlgea() {
     m_positionRadians = maxRotations;
     setReferencePeriodic();
-    m_intakeMotor.set(-0.5);
+    m_intakeMotor.set(-0.1);
   }
 
   public double getMinRotations() {
