@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.MoveClimberCommand;
 import frc.robot.commands.arms.ArmMoveCommands;
-import frc.robot.commands.arms.MoveBallScrewCommand;
 import frc.robot.commands.arms.MoveLinearArmCommand;
 import frc.robot.commands.arms.MoveRotateArmCommand;
 import frc.robot.commands.arms.WristCommand;
@@ -99,14 +98,13 @@ public class RobotContainer {
 
         // Variable Position Commands
         rotateArm.setDefaultCommand(new MoveRotateArmCommand(rotateArm, operator));
-        ballScrew.setDefaultCommand(new MoveBallScrewCommand(ballScrew, operator));
         linearArm.setDefaultCommand(new MoveLinearArmCommand(linearArm, operator));
         climber.setDefaultCommand(new MoveClimberCommand(climber, driver));
         wrist.setDefaultCommand(new WristCommand(wrist, operator));
 
         // Linear Arm Presets
-        operator.button(XboxController.Button.kLeftBumper.value).onTrue(new InstantCommand(linearArm::moveToRetractedPosition));
-        operator.button(XboxController.Button.kRightBumper.value).onTrue(new InstantCommand(linearArm::moveToExtendedPosition));
+        operator.button(XboxController.Button.kLeftBumper.value).onTrue(new InstantCommand(ballScrew::moveToDownPosition));
+        operator.button(XboxController.Button.kRightBumper.value).onTrue(new InstantCommand(ballScrew::moveToUpPosition));
 
         // Move Arms
         operator.button(XboxController.Button.kX.value).onTrue(armCommands.MoveAllHome());

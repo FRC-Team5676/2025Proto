@@ -57,6 +57,16 @@ public class BallScrewSubsystem extends SubsystemBase {
     setReferencePeriodic();
   }
 
+  public void moveToUpPosition() {
+    m_positionInches = minDistance;
+    setReferencePeriodic();
+  }
+
+  public void moveToDownPosition() {
+    m_positionInches = maxDistance;
+    setReferencePeriodic();
+  }
+
   public double getMinDistance() {
     return minDistance;
   }

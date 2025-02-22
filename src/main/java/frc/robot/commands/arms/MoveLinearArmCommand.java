@@ -25,7 +25,8 @@ public class MoveLinearArmCommand extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_controlArm.driveArm(m_controller.getLeftY());
+        double trigger = m_controller.getLeftTriggerAxis() - m_controller.getRightTriggerAxis();
+        m_controlArm.driveArm(trigger);
     }
 
     // Called once the command ends or is interrupted.
