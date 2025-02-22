@@ -21,7 +21,7 @@ import frc.robot.utils.ShuffleboardContent;
 public class WristSubsystem extends SubsystemBase {
 
   public double m_positionRadians;
-  public static final double kGearRatio = 50/1;
+  public static final double kGearRatio = 1/1;
   public static final double kIntakeArmEncoderPositionFactor = (2 * Math.PI) / kGearRatio;
 
   private final int m_WristCanId = 54;
@@ -30,8 +30,8 @@ public class WristSubsystem extends SubsystemBase {
   private final SparkMax m_driveMotor;
   private final SparkClosedLoopController m_driveController;
 
-  private final double minRotations = Units.degreesToRadians(-11000);
-  private final double maxRotations = Units.degreesToRadians(18000);
+  private final double minRotations = Units.degreesToRadians(-180);
+  private final double maxRotations = Units.degreesToRadians(180);
 
   public WristSubsystem() {
     // Drive Motor setup
@@ -44,7 +44,7 @@ public class WristSubsystem extends SubsystemBase {
 
     SparkMaxConfig config = new SparkMaxConfig();
     config.closedLoop
-    .p(1)
+    .p(0.5)
     .i(0)
     .d(0)
     .outputRange(-1, 1);

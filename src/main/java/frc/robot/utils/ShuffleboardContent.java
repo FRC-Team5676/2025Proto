@@ -110,7 +110,7 @@ public class ShuffleboardContent {
         }
 
         public static void initWrist(WristSubsystem drive) {
-                ShuffleboardTab drLayout1 = Shuffleboard.getTab("Algae");
+                ShuffleboardTab drLayout1 = Shuffleboard.getTab("Wrist");
 
                 drLayout1.addNumber("Angle", () -> Units.radiansToDegrees(drive.getPosition()))
                         .withPosition(1, 1)
