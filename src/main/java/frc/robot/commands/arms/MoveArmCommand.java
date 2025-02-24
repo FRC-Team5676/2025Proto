@@ -1,24 +1,20 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands.arms;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 
-public class WristCommand extends Command {
+public class MoveArmCommand extends Command {
 
-    private final WristSubsystem m_controlArm;
+    private final ArmSubsystem m_Arm;
     private final CommandXboxController m_controller;
 
     /** Driver control */
-    public WristCommand(WristSubsystem controlArm, CommandXboxController controller) {
-        m_controlArm = controlArm;
+    public MoveArmCommand(ArmSubsystem arm, CommandXboxController controller) {
+        m_Arm = arm;
         m_controller = controller;
 
-        addRequirements(controlArm);
+        addRequirements(arm);
     }
 
     // Called when the command is initially scheduled.
@@ -29,7 +25,12 @@ public class WristCommand extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_controlArm.driveArm(m_controller.getLeftY());
+        m_Arm.driveRotateArm(m_controller.getRightY());
+
+        double trigger = m_controller.getLeftTriggerAxis() - m_controller.getRightTriggerAxis();
+        m_Arm.driveLinearArm(trigger);
+        
+        m_Arm.driveWrist(m_controller.getLeftY());
     }
 
     // Called once the command ends or is interrupted.

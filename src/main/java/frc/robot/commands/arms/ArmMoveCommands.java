@@ -4,45 +4,37 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BallScrewSubsystem;
-import frc.robot.subsystems.LinearArmSubsystem;
-import frc.robot.subsystems.RotateArmSubsystem;
-import frc.robot.subsystems.WristSubsystem;
 
 public class ArmMoveCommands extends Command {
 
-    private final BallScrewSubsystem m_ballScrew;
-    private final RotateArmSubsystem m_rotateArm;
-    private final LinearArmSubsystem m_linearArm;
-    private final WristSubsystem m_wrist;
+    private final BallScrewSubsystem m_BallScrew;
+    private final ArmSubsystem m_Arm;
 
     public ArmMoveCommands(BallScrewSubsystem ballScrew,
-            RotateArmSubsystem rotateArm,
-            LinearArmSubsystem linearArm,
-            WristSubsystem wrist) {
+            ArmSubsystem arm) {
 
-        m_ballScrew = ballScrew;
-        m_rotateArm = rotateArm;
-        m_linearArm = linearArm;
-        m_wrist = wrist;
+        m_BallScrew = ballScrew;
+        m_Arm = arm;
 
-        addRequirements(ballScrew, rotateArm, linearArm, wrist);
+        addRequirements(ballScrew, arm);
     }
 
     public Command MoveAllHome() {
         return Commands.sequence(
-                new InstantCommand(() -> m_ballScrew.moveToDownPosition()),
-                new InstantCommand(() -> m_wrist.setReferenceValue(0)),
-                new InstantCommand(() -> m_linearArm.setReferenceValue(Units.radiansToDegrees(m_linearArm.getMaxRotations()))),
-                new InstantCommand(() -> m_rotateArm.setReferenceValue(0)));
+                new InstantCommand(() -> m_BallScrew.moveToDownPosition()),
+                new InstantCommand(() -> m_Arm.moveWrist(0)),
+                new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getMaxLinearArmDegrees())),
+                new InstantCommand(() -> m_Arm.moveRotateArm(0)));
     }
 
     public Command MoveToL2() {
         return Commands.sequence(
-                new InstantCommand(() -> m_ballScrew.moveToUpPosition()),
-                new InstantCommand(() -> m_rotateArm.setReferenceValue(72)),
-                new InstantCommand(() -> m_linearArm.setReferenceValue(Units.radiansToDegrees(m_linearArm.getMaxRotations()))),
-                new InstantCommand(() -> m_wrist.setReferenceValue(0))
+                new InstantCommand(() -> m_BallScrew.moveToUpPosition()),
+                new InstantCommand(() -> m_Arm.moveRotateArm(72)),
+                new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getMaxLinearArmDegrees())),
+                new InstantCommand(() -> m_Arm.moveWrist(0))
             );
     }
 

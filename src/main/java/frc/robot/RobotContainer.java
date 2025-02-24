@@ -24,29 +24,23 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.MoveClimberCommand;
 import frc.robot.commands.arms.ArmMoveCommands;
-import frc.robot.commands.arms.MoveLinearArmCommand;
-import frc.robot.commands.arms.MoveRotateArmCommand;
-import frc.robot.commands.arms.WristCommand;
+import frc.robot.commands.arms.MoveArmCommand;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BallScrewSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.LinearArmSubsystem;
 import frc.robot.subsystems.RotateAlgaeSubsystem;
-import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.RotateArmSubsystem;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
                                                                                       // max angular velocity
 
-    private final RotateArmSubsystem rotateArm = new RotateArmSubsystem();
+    private final ArmSubsystem arm = new ArmSubsystem();
     private final BallScrewSubsystem ballScrew = new BallScrewSubsystem();
-    private final LinearArmSubsystem linearArm = new LinearArmSubsystem();
     private final ClimberSubsystem climber = new ClimberSubsystem();
     private final RotateAlgaeSubsystem rotateAlgae = new RotateAlgaeSubsystem();
-    private final WristSubsystem wrist = new WristSubsystem();
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -75,7 +69,7 @@ public class RobotContainer {
 
     private void configureBindings() {
 
-        var armCommands = new ArmMoveCommands(ballScrew, rotateArm, linearArm, wrist);
+        var armCommands = new ArmMoveCommands(ballScrew, arm);
 
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
@@ -97,10 +91,8 @@ public class RobotContainer {
         driver.button(8).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         // Variable Position Commands
-        rotateArm.setDefaultCommand(new MoveRotateArmCommand(rotateArm, operator));
-        linearArm.setDefaultCommand(new MoveLinearArmCommand(linearArm, operator));
         climber.setDefaultCommand(new MoveClimberCommand(climber, driver));
-        wrist.setDefaultCommand(new WristCommand(wrist, operator));
+        arm.setDefaultCommand(new MoveArmCommand(arm, operator));
 
         // Linear Arm Presets
         operator.button(XboxController.Button.kLeftBumper.value).onTrue(new InstantCommand(ballScrew::moveToDownPosition));
