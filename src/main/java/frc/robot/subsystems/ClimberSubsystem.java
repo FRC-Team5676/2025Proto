@@ -20,7 +20,7 @@ import frc.robot.utils.ShuffleboardContent;
 
 public class ClimberSubsystem extends SubsystemBase {
   public double m_positionRadians;
-  public static final double kGearRatio = 60/1;
+  public static final double kGearRatio = 45/1;
   public static final double kIntakeArmEncoderPositionFactor = (2 * Math.PI) / kGearRatio;
 
   private final int m_ClimberCanId = 56;

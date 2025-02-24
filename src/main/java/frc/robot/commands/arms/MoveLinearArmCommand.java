@@ -27,6 +27,7 @@ public class MoveLinearArmCommand extends Command {
     public void execute() {
         double trigger = m_controller.getLeftTriggerAxis() - m_controller.getRightTriggerAxis();
         m_controlArm.driveArm(trigger);
+        
     }
 
     // Called once the command ends or is interrupted.
