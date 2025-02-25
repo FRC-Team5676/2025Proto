@@ -23,37 +23,62 @@ public class ArmMoveCommands extends Command {
 
     public Command MoveAllHome() {
         return Commands.sequence(
-                new InstantCommand(() -> m_BallScrew.moveToDownPosition()),
+            Commands.parallel(
                 new InstantCommand(() -> m_Arm.moveWrist(0)),
                 new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getMaxLinearArmDegrees())),
-                new InstantCommand(() -> m_Arm.moveRotateArm(0)));
+                new InstantCommand(() -> m_Arm.moveRotateArm(0))
+            ),
+            Commands.waitSeconds(1),
+            Commands.run(m_BallScrew::moveToDownPosition, m_BallScrew)
+        );
     }
 
     public Command MoveToL2() {
+        double timeOut = 0.0;
+        if (m_BallScrew.getPosition() > -250000) {
+            timeOut = 1.0;
+        }
         return Commands.sequence(
-                new InstantCommand(() -> m_BallScrew.moveToUpPosition()),
-                new InstantCommand(() -> m_Arm.moveRotateArm(72)),
+            Commands.run(m_BallScrew::moveToUpPosition, m_BallScrew),
+            Commands.waitSeconds(timeOut),
+            Commands.parallel(
+                new InstantCommand(() -> m_Arm.moveWrist(0)),
                 new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getMaxLinearArmDegrees())),
-                new InstantCommand(() -> m_Arm.moveWrist(0))
-            );
+                new InstantCommand(() -> m_Arm.moveRotateArm(72))
+            )
+        );
     }
 
-    /*
-     * public Command MoveToL2() {
-     * return run(() -> m_ballScrew.setReferenceValue(m_ballScrew.getMinDistance())
-     * .until(m_ballScrew::atSetpoint)
-     * .thenrun(() -> runOnce(PositionL2)));
-     * }
-     * 
-     * private Command PositionL2() {
-     * return Commands.sequence(
-     * new InstantCommand(() -> m_rotateArm.setReferenceValue(72)),
-     * new InstantCommand(() ->
-     * m_linearArm.setReferenceValue(Units.radiansToDegrees(m_linearArm.
-     * getMaxRotations()))),
-     * new InstantCommand(() -> m_wrist.setReferenceValue(0))
-     * );
-     * 
-     * }
-     */
+    public Command MoveToL3() {
+        double timeOut = 0.0;
+        if (m_BallScrew.getPosition() > -250000) {
+            timeOut = 1.0;
+        }
+        return Commands.sequence(
+            Commands.run(m_BallScrew::moveToUpPosition, m_BallScrew),
+            Commands.waitSeconds(timeOut),
+            Commands.parallel(
+                new InstantCommand(() -> m_Arm.moveWrist(0)),
+                new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getMinLinearArmDegrees())),
+                new InstantCommand(() -> m_Arm.moveRotateArm(-72))
+            )
+        );
+    }
+
+    public Command MoveToL4() {
+        double timeOut = 0.0;
+        if (m_BallScrew.getPosition() > -250000) {
+            timeOut = 1.0;
+        }
+        return Commands.sequence(
+            Commands.run(m_BallScrew::moveToUpPosition, m_BallScrew),
+            Commands.waitSeconds(timeOut),
+            Commands.parallel(
+                new InstantCommand(() -> m_Arm.moveWrist(0)),
+                new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getMaxLinearArmDegrees())),
+                new InstantCommand(() -> m_Arm.moveRotateArm(-72))
+            )
+        );
+    }
+
 }
