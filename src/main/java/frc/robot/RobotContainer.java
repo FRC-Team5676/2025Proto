@@ -102,7 +102,9 @@ public class RobotContainer {
 
         // Move Arms
         operator.button(XboxController.Button.kX.value).onTrue(armCommands.moveToHome());
-        operator.povLeft().and(operator.button(XboxController.Button.kX.value).onTrue(armCommands.pickupCoral()));
+        operator.povLeft()
+            .and(operator.button(XboxController.Button.kX.value))
+            .onTrue(armCommands.pickupCoral());
         operator.button(XboxController.Button.kY.value).onTrue(armCommands.moveToL2());
 
         // Algea
