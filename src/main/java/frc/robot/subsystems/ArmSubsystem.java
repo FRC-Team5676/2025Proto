@@ -50,7 +50,7 @@ public class ArmSubsystem extends SubsystemBase {
   private final double m_MaxRotateZoneRadians = Units.degreesToRadians(80);
 
   private double m_ExtendedLinearArmRadians = Units.degreesToRadians(-720);
-  private double m_pickupLinearArmRadians = Units.degreesToRadians(-20);
+  private double m_pickupLinearArmRadians = Units.degreesToRadians(-462);
   private double m_retractedLinearArmRadians = Units.degreesToRadians(0);
 
   private final double m_MinWristRadians = Units.degreesToRadians(-180);

@@ -23,10 +23,11 @@ public class ArmMoveCommands extends Command {
     public Command moveToHome() {
         return Commands.sequence(
             Commands.parallel(
-                new InstantCommand(() -> m_Arm.moveWrist(0)),
-                new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getRetractedLinearArmDegrees())),
-                new InstantCommand(() -> m_Arm.moveRotateArm(0))
+                new InstantCommand(() -> m_Arm.moveRotateArm(-28)),
+                new InstantCommand(() -> m_Arm.moveWrist(90))
             ),
+            Commands.waitSeconds(0.5),
+            new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getPickupLinearArmDegrees())),
             Commands.waitSeconds(0.5),
             new InstantCommand(() -> m_BallScrew.moveToDownPosition())
         );
@@ -35,16 +36,15 @@ public class ArmMoveCommands extends Command {
     public Command pickupCoral() {
         if (m_BallScrew.atDownPosition()) {
             return Commands.sequence(
-                new InstantCommand(() -> m_Arm.moveRotateArm(-10)),
-                Commands.waitSeconds(0.25),
                 Commands.parallel(
-                    new InstantCommand(() -> m_Arm.moveWrist(100)),
-                    new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getPickupLinearArmDegrees()))
+                    new InstantCommand(() -> m_Arm.moveRotateArm(0)),
+                    new InstantCommand(() -> m_Arm.moveWrist(105))
                 ),
-                Commands.waitSeconds(0.25),
-                new InstantCommand(() -> m_Arm.moveRotateArm(10)),
-                Commands.waitSeconds(0.25),
-                new InstantCommand(() -> m_Arm.moveWrist(0))
+                Commands.waitSeconds(0.5),
+                Commands.parallel(
+                    new InstantCommand(() -> m_Arm.moveRotateArm(-28)),
+                    new InstantCommand(() -> m_Arm.moveWrist(90))
+                )
             );
         }
         return moveToHome();
