@@ -20,29 +20,47 @@ public class ArmMoveCommands extends Command {
         addRequirements(ballScrew, arm);
     }
 
-    public Command MoveAllHome() {
+    public Command moveToHome() {
         return Commands.sequence(
             Commands.parallel(
                 new InstantCommand(() -> m_Arm.moveWrist(0)),
-                new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getMaxLinearArmDegrees())),
+                new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getRetractedLinearArmDegrees())),
                 new InstantCommand(() -> m_Arm.moveRotateArm(0))
             ),
-            Commands.waitSeconds(1),
-            Commands.run(m_BallScrew::moveToDownPosition, m_BallScrew)
+            Commands.waitSeconds(0.5),
+            new InstantCommand(() -> m_BallScrew.moveToDownPosition())
         );
     }
 
-    public Command MoveToL2() {
+    public Command pickupCoral() {
+        if (m_BallScrew.atDownPosition()) {
+            return Commands.sequence(
+                new InstantCommand(() -> m_Arm.moveRotateArm(-10)),
+                Commands.waitSeconds(0.25),
+                Commands.parallel(
+                    new InstantCommand(() -> m_Arm.moveWrist(100)),
+                    new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getPickupLinearArmDegrees()))
+                ),
+                Commands.waitSeconds(0.25),
+                new InstantCommand(() -> m_Arm.moveRotateArm(10)),
+                Commands.waitSeconds(0.25),
+                new InstantCommand(() -> m_Arm.moveWrist(0))
+            );
+        }
+        return moveToHome();
+    }
+
+    public Command moveToL2() {
         double timeOut = 0.0;
-        if (m_BallScrew.getActualUnits() > -250000) {
+        if (m_BallScrew.belowMidPosition()) {
             timeOut = 1.0;
         }
         return Commands.sequence(
-            Commands.run(m_BallScrew::moveToUpPosition, m_BallScrew),
+            new InstantCommand(() -> m_BallScrew.moveToUpPosition()),
             Commands.waitSeconds(timeOut),
             Commands.parallel(
                 new InstantCommand(() -> m_Arm.moveWrist(0)),
-                new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getMaxLinearArmDegrees())),
+                new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getRetractedLinearArmDegrees())),
                 new InstantCommand(() -> m_Arm.moveRotateArm(72))
             )
         );
@@ -50,15 +68,15 @@ public class ArmMoveCommands extends Command {
 
     public Command MoveToL3() {
         double timeOut = 0.0;
-        if (m_BallScrew.getActualUnits() > -250000) {
+        if (m_BallScrew.belowMidPosition()) {
             timeOut = 1.0;
         }
         return Commands.sequence(
-            Commands.run(m_BallScrew::moveToUpPosition, m_BallScrew),
+            new InstantCommand(() -> m_BallScrew.moveToUpPosition()),
             Commands.waitSeconds(timeOut),
             Commands.parallel(
                 new InstantCommand(() -> m_Arm.moveWrist(0)),
-                new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getMinLinearArmDegrees())),
+                new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getExtendedLinearArmDegrees())),
                 new InstantCommand(() -> m_Arm.moveRotateArm(-72))
             )
         );
@@ -66,15 +84,15 @@ public class ArmMoveCommands extends Command {
 
     public Command MoveToL4() {
         double timeOut = 0.0;
-        if (m_BallScrew.getActualUnits() > -250000) {
+        if (m_BallScrew.belowMidPosition()) {
             timeOut = 1.0;
         }
         return Commands.sequence(
-            Commands.run(m_BallScrew::moveToUpPosition, m_BallScrew),
+            new InstantCommand(() -> m_BallScrew.moveToUpPosition()),
             Commands.waitSeconds(timeOut),
             Commands.parallel(
                 new InstantCommand(() -> m_Arm.moveWrist(0)),
-                new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getMaxLinearArmDegrees())),
+                new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getRetractedLinearArmDegrees())),
                 new InstantCommand(() -> m_Arm.moveRotateArm(-72))
             )
         );

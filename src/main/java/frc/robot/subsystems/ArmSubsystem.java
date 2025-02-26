@@ -46,9 +46,12 @@ public class ArmSubsystem extends SubsystemBase {
 
   private final double m_MinRotateArmRadians = Units.degreesToRadians(-270);
   private final double m_MaxRotateArmRadians = Units.degreesToRadians(270);
+  private final double m_MinRotateZoneRadians = Units.degreesToRadians(-190);
+  private final double m_MaxRotateZoneRadians = Units.degreesToRadians(80);
 
-  private double m_MinLinearArmRadians = Units.degreesToRadians(-720);
-  private double m_MaxLinearArmRadians = Units.degreesToRadians(0);
+  private double m_ExtendedLinearArmRadians = Units.degreesToRadians(-720);
+  private double m_pickupLinearArmRadians = Units.degreesToRadians(-20);
+  private double m_retractedLinearArmRadians = Units.degreesToRadians(0);
 
   private final double m_MinWristRadians = Units.degreesToRadians(-180);
   private final double m_MaxWristRadians = Units.degreesToRadians(180);
@@ -87,46 +90,13 @@ public class ArmSubsystem extends SubsystemBase {
   public void periodic() {
   }
 
-  public void moveRotateArm(double degrees) {
-    m_RotateArmTargetRadians = Units.degreesToRadians(degrees);
-    m_MaxLinearArmRadians += Units.degreesToRadians(degrees);
-    m_MinLinearArmRadians += Units.degreesToRadians(degrees);
-    m_LinearArmTargetRadians += Units.degreesToRadians(degrees);
-    setReferencePeriodic();
-  }
-
-  public void moveLinearArm(double degrees) {
-    m_LinearArmTargetRadians = Units.degreesToRadians(degrees);
-    setReferencePeriodic();
-  }
-
-  public void moveWrist(double degrees) {
-    m_WristTargetRadians = Units.degreesToRadians(degrees);
-    setReferencePeriodic();
-  }
-
+  // Rotate Arm
   public double getMinRotateArmDegrees() {
     return Units.radiansToDegrees(m_MinRotateArmRadians);
   }
 
-  public double getMinLinearArmDegrees() {
-    return Units.radiansToDegrees(m_MinLinearArmRadians);
-  }
-
-  public double getMinWristDegrees() {
-    return Units.radiansToDegrees(m_MinWristRadians);
-  }
-
   public double getMaxRotateArmDegrees() {
     return Units.radiansToDegrees(m_MaxRotateArmRadians);
-  }
-
-  public double getMaxLinearArmDegrees() {
-    return Units.radiansToDegrees(m_MaxLinearArmRadians);
-  }
-
-  public double getMaxWristDegrees() {
-    return Units.radiansToDegrees(m_MaxWristRadians);
   }
 
   public double getRotateArmDegrees() {
@@ -137,12 +107,34 @@ public class ArmSubsystem extends SubsystemBase {
     return Units.radiansToDegrees(m_RotateArmTargetRadians);
   }
 
+  // Linear Arm
+  public double getExtendedLinearArmDegrees() {
+    return Units.radiansToDegrees(m_ExtendedLinearArmRadians);
+  }
+
+  public double getPickupLinearArmDegrees() {
+    return Units.radiansToDegrees(m_pickupLinearArmRadians);
+  }
+
+  public double getRetractedLinearArmDegrees() {
+    return Units.radiansToDegrees(m_retractedLinearArmRadians);
+  }
+
   public double getLinearArmDegrees() {
     return Units.radiansToDegrees(m_LinearArmEncoder.getPosition());
   }
 
   public double getLinearArmTargetDegrees() {
     return Units.radiansToDegrees(m_LinearArmTargetRadians);
+  }
+
+  // Wrist
+  public double getMinWristDegrees() {
+    return Units.radiansToDegrees(m_MinWristRadians);
+  }
+
+  public double getMaxWristDegrees() {
+    return Units.radiansToDegrees(m_MaxWristRadians);
   }
 
   public double getWristDegrees() {
@@ -153,16 +145,35 @@ public class ArmSubsystem extends SubsystemBase {
     return Units.radiansToDegrees(m_WristTargetRadians);
   }
 
+  // Drive Rotate Arm
+  public void moveRotateArm(double degrees) {
+    m_RotateArmTargetRadians = Units.degreesToRadians(degrees);
+    m_retractedLinearArmRadians += Units.degreesToRadians(degrees);
+    m_pickupLinearArmRadians += Units.degreesToRadians(degrees);
+    m_ExtendedLinearArmRadians += Units.degreesToRadians(degrees);
+    m_LinearArmTargetRadians += Units.degreesToRadians(degrees);
+    if (m_RotateArmTargetRadians >= m_MaxRotateZoneRadians || m_RotateArmTargetRadians <= m_MinRotateZoneRadians) {
+      m_LinearArmTargetRadians = m_retractedLinearArmRadians;
+    } 
+
+    setReferencePeriodic();
+  }
+
   public void driveRotateArm(double degrees) {
     if (Math.abs(degrees) > 0.05) {
       m_RotateArmTargetRadians += Units.degreesToRadians(degrees);
-      m_MaxLinearArmRadians += Units.degreesToRadians(degrees);
-      m_MinLinearArmRadians += Units.degreesToRadians(degrees);
+      m_retractedLinearArmRadians += Units.degreesToRadians(degrees);
+      m_pickupLinearArmRadians += Units.degreesToRadians(degrees);
+      m_ExtendedLinearArmRadians += Units.degreesToRadians(degrees);
       m_LinearArmTargetRadians += Units.degreesToRadians(degrees);
+      if (m_RotateArmTargetRadians >= m_MaxRotateZoneRadians || m_RotateArmTargetRadians <= m_MinRotateZoneRadians) {
+        m_LinearArmTargetRadians = m_retractedLinearArmRadians;
+      } 
     }
     setReferencePeriodic();
   }
 
+  // Drive Linear Arm
   public void driveLinearArm(double degrees) {
     if (Math.abs(degrees) > 0.05) {
       m_LinearArmTargetRadians += Units.degreesToRadians(degrees * 10);
@@ -170,6 +181,12 @@ public class ArmSubsystem extends SubsystemBase {
     setReferencePeriodic();
   }
 
+  public void moveLinearArm(double degrees) {
+    m_LinearArmTargetRadians = Units.degreesToRadians(degrees);
+    setReferencePeriodic();
+  }
+
+  // Drive Wrist
   public void driveWrist(double degrees) {
     if (Math.abs(degrees) > 0.05) {
       m_WristTargetRadians += Units.degreesToRadians(degrees * 2);
@@ -177,9 +194,15 @@ public class ArmSubsystem extends SubsystemBase {
     setReferencePeriodic();
   }
 
+  public void moveWrist(double degrees) {
+    m_WristTargetRadians = Units.degreesToRadians(degrees);
+    setReferencePeriodic();
+  }
+
+  // Private methods
   private void setReferencePeriodic() {
     m_RotateArmTargetRadians = MathUtil.clamp(m_RotateArmTargetRadians, m_MinRotateArmRadians, m_MaxRotateArmRadians);
-    m_LinearArmTargetRadians = MathUtil.clamp(m_LinearArmTargetRadians, m_MinLinearArmRadians, m_MaxLinearArmRadians);
+    m_LinearArmTargetRadians = MathUtil.clamp(m_LinearArmTargetRadians, m_ExtendedLinearArmRadians, m_retractedLinearArmRadians);
     m_WristTargetRadians = MathUtil.clamp(m_WristTargetRadians, m_MinWristRadians, m_MaxWristRadians);
 
     m_RotateArmController.setReference(m_RotateArmTargetRadians, ControlType.kPosition);

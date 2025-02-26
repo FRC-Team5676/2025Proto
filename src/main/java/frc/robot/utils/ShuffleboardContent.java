@@ -47,10 +47,10 @@ public class ShuffleboardContent {
                 drLayout1.addNumber("Target Distance", () -> drive.m_positionUnits)
                         .withPosition(1, 2)
                         .withSize(2, 1);
-                drLayout1.addNumber("Min Distance", () -> drive.getMinUnits())
+                drLayout1.addNumber("Min Distance", () -> drive.getUpPosition())
                         .withPosition(1, 3)
                         .withSize(2, 1);
-                drLayout1.addNumber("Max Distance", () -> drive.getMaxUnits())
+                drLayout1.addNumber("Max Distance", () -> drive.getDownPosition())
                         .withPosition(1, 4)
                         .withSize(2, 1);
         }
@@ -64,10 +64,10 @@ public class ShuffleboardContent {
                 drLayout1.addNumber("Target Angle", () -> drive.getLinearArmTargetDegrees())
                         .withPosition(1, 2)
                         .withSize(2, 1);
-                drLayout1.addNumber("Min Angle", () -> drive.getMinLinearArmDegrees())
+                drLayout1.addNumber("Min Angle", () -> drive.getExtendedLinearArmDegrees())
                         .withPosition(1, 3)
                         .withSize(2, 1);
-                drLayout1.addNumber("Max Angle", () -> drive.getMaxLinearArmDegrees())
+                drLayout1.addNumber("Max Angle", () -> drive.getRetractedLinearArmDegrees())
                         .withPosition(1, 4)
                         .withSize(2, 1);
         }

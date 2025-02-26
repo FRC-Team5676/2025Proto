@@ -18,8 +18,8 @@ public class BallScrewSubsystem extends SubsystemBase {
 
   private final WPI_TalonSRX m_driveMotor;
 
-  private final double minDistance = -540000; //-540000;
-  private final double maxDistance = 3938; //3938;
+  private final double ballScrewUpPosition = -540000; //-540000;
+  private final double ballScrewDownPosition = 3938; //3938;
 
   public BallScrewSubsystem() {
     // Drive Motor setup
@@ -51,21 +51,39 @@ public class BallScrewSubsystem extends SubsystemBase {
   }
 
   public void moveToUpPosition() {
-    m_positionUnits = minDistance;
+    m_positionUnits = ballScrewUpPosition;
     setReferencePeriodic();
   }
 
   public void moveToDownPosition() {
-    m_positionUnits = maxDistance;
+    m_positionUnits = ballScrewDownPosition;
     setReferencePeriodic();
   }
 
-  public double getMinUnits() {
-    return minDistance;
+  public boolean atDownPosition() {
+    double min = ballScrewDownPosition - ballScrewDownPosition * 0.1;
+    double max = ballScrewDownPosition + ballScrewDownPosition * 0.1;
+    if (getActualUnits() >= min && getActualUnits() <= max) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  public double getMaxUnits() {
-    return maxDistance;
+  public double getUpPosition() {
+    return ballScrewUpPosition;
+  }
+
+  public double getDownPosition() {
+    return ballScrewDownPosition;
+  }
+
+  public boolean belowMidPosition() {
+    double midPosition = (ballScrewUpPosition + ballScrewDownPosition) / 2;
+    if (getActualUnits() > midPosition) {
+      return true;
+    }
+    return false;
   }
 
   public double getActualUnits() {
@@ -84,7 +102,7 @@ public class BallScrewSubsystem extends SubsystemBase {
   }
 
   private void setReferencePeriodic() {
-    m_positionUnits = MathUtil.clamp(m_positionUnits, minDistance, maxDistance);
+    m_positionUnits = MathUtil.clamp(m_positionUnits, ballScrewUpPosition, ballScrewDownPosition);
     m_driveMotor.set(ControlMode.Position, m_positionUnits);
   }
 }

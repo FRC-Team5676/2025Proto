@@ -101,8 +101,8 @@ public class RobotContainer {
         operator.button(XboxController.Button.kRightBumper.value).onTrue(new InstantCommand(ballScrew::moveToUpPosition));
 
         // Move Arms
-        operator.button(XboxController.Button.kX.value).onTrue(armCommands.MoveAllHome());
-        operator.button(XboxController.Button.kY.value).onTrue(armCommands.MoveToL2());
+        operator.button(XboxController.Button.kX.value).onTrue(armCommands.moveToHome());
+        operator.button(XboxController.Button.kY.value).onTrue(armCommands.moveToL2());
 
         // Algea
         operator.povDown().onTrue(new InstantCommand(rotateAlgae::intakeAlgea));
