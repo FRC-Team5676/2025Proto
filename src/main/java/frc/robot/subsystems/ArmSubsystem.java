@@ -42,8 +42,8 @@ public class ArmSubsystem extends SubsystemBase {
 
   private final double m_MinRotateArmRadians = Units.degreesToRadians(-270);
   private final double m_MaxRotateArmRadians = Units.degreesToRadians(270);
-  private final double m_MinLinearArmRadians = Units.degreesToRadians(-540);
-  private final double m_MaxLinearArmRadians = Units.degreesToRadians(540);
+  private double m_MinLinearArmRadians = Units.degreesToRadians(-720);
+  private double m_MaxLinearArmRadians = Units.degreesToRadians(0);
   private final double m_MinWristRadians = Units.degreesToRadians(-180);
   private final double m_MaxWristRadians = Units.degreesToRadians(180);
 
@@ -110,6 +110,9 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void moveRotateArm(double degrees) {
     m_RotateArmPositionRadians = Units.degreesToRadians(degrees);
+    m_MaxLinearArmRadians += Units.degreesToRadians(degrees);
+    m_MinLinearArmRadians += Units.degreesToRadians(degrees);
+    m_LinearArmPositionRadians += Units.degreesToRadians(degrees);
     setReferencePeriodic();
   }
 
@@ -162,6 +165,9 @@ public class ArmSubsystem extends SubsystemBase {
   public void driveRotateArm(double throttle) {
     if (Math.abs(throttle) > 0.05) {
       m_RotateArmPositionRadians += Units.degreesToRadians(throttle);
+      m_MaxLinearArmRadians += Units.degreesToRadians(throttle);
+      m_MinLinearArmRadians += Units.degreesToRadians(throttle);
+      m_LinearArmPositionRadians += Units.degreesToRadians(throttle);
     }
     setReferencePeriodic();
   }
