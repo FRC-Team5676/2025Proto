@@ -1,6 +1,5 @@
 package frc.robot.commands.arms;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -35,7 +34,7 @@ public class ArmMoveCommands extends Command {
 
     public Command MoveToL2() {
         double timeOut = 0.0;
-        if (m_BallScrew.getPosition() > -250000) {
+        if (m_BallScrew.getActualUnits() > -250000) {
             timeOut = 1.0;
         }
         return Commands.sequence(
@@ -51,7 +50,7 @@ public class ArmMoveCommands extends Command {
 
     public Command MoveToL3() {
         double timeOut = 0.0;
-        if (m_BallScrew.getPosition() > -250000) {
+        if (m_BallScrew.getActualUnits() > -250000) {
             timeOut = 1.0;
         }
         return Commands.sequence(
@@ -67,7 +66,7 @@ public class ArmMoveCommands extends Command {
 
     public Command MoveToL4() {
         double timeOut = 0.0;
-        if (m_BallScrew.getPosition() > -250000) {
+        if (m_BallScrew.getActualUnits() > -250000) {
             timeOut = 1.0;
         }
         return Commands.sequence(

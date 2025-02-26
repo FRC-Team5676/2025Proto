@@ -12,9 +12,7 @@ import frc.robot.utils.ShuffleboardContent;
 
 public class BallScrewSubsystem extends SubsystemBase {
 
-  public double m_positionInches;
-  public static final double kGearRatio = 5 / 1;
-  public static final double kPositionFactor = 0.1 / kGearRatio;
+  public double m_positionUnits;
 
   private final int m_canId = 50;
 
@@ -43,7 +41,7 @@ public class BallScrewSubsystem extends SubsystemBase {
     m_driveMotor.configPeakOutputForward(1);
     m_driveMotor.configPeakOutputReverse(-1);
     
-    m_positionInches = m_driveMotor.getSelectedSensorPosition();
+    m_positionUnits = m_driveMotor.getSelectedSensorPosition();
 
     ShuffleboardContent.initBallScrew(this);
   }
@@ -52,46 +50,41 @@ public class BallScrewSubsystem extends SubsystemBase {
   public void periodic() {
   }
 
-  public void moveToPosition(double position) {
-    setReferenceValue(position);
-    setReferencePeriodic();
-  }
-
   public void moveToUpPosition() {
-    m_positionInches = minDistance;
+    m_positionUnits = minDistance;
     setReferencePeriodic();
   }
 
   public void moveToDownPosition() {
-    m_positionInches = maxDistance;
+    m_positionUnits = maxDistance;
     setReferencePeriodic();
   }
 
-  public double getMinDistance() {
+  public double getMinUnits() {
     return minDistance;
   }
 
-  public double getMaxDistance() {
+  public double getMaxUnits() {
     return maxDistance;
   }
 
-  public double getPosition() {
+  public double getActualUnits() {
     return m_driveMotor.getSelectedSensorPosition();
   }
 
-  public void driveArm(double throttle) {
-    if (Math.abs(throttle) > 0.05) {
-      m_positionInches += throttle * 10000;
+  public double getTargetUnits() {
+    return m_positionUnits;
+  }
+
+  public void driveArm(double units) {
+    if (Math.abs(units) > 0.05) {
+      m_positionUnits += units * 10000;
     }
     setReferencePeriodic();
   }
 
-  public void setReferenceValue(double distance) {
-    m_positionInches = distance;
-  }
-
-  public void setReferencePeriodic() {
-    m_positionInches = MathUtil.clamp(m_positionInches, minDistance, maxDistance);
-    m_driveMotor.set(ControlMode.Position, m_positionInches);
+  private void setReferencePeriodic() {
+    m_positionUnits = MathUtil.clamp(m_positionUnits, minDistance, maxDistance);
+    m_driveMotor.set(ControlMode.Position, m_positionUnits);
   }
 }

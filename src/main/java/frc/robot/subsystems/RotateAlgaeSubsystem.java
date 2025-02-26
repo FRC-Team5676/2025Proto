@@ -11,6 +11,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -21,9 +22,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.ShuffleboardContent;
 
 public class RotateAlgaeSubsystem extends SubsystemBase {
-  public double m_positionRadians;
-  public static final double kGearRatio = 45/1;
-  public static final double kIntakeArmEncoderPositionFactor = (2 * Math.PI) / kGearRatio;
+
+  private double m_targetRadians;
+
+  private static final double kGearRatio = 45/1;
+  private static final double kIntakeArmEncoderPositionFactor = (2 * Math.PI) / kGearRatio;
 
   private final int m_RotateAlgaeCanId = 55;
   private final int m_intakeAlgaeCanId = 51;
@@ -32,8 +35,8 @@ public class RotateAlgaeSubsystem extends SubsystemBase {
   private final SparkMax m_rotateMotor;
   private final SparkClosedLoopController m_rotateController;
 
-  private final double minRotations = Units.degreesToRadians(-300);
-  private final double maxRotations = Units.degreesToRadians(0);
+  private final double minRadians = Units.degreesToRadians(-300);
+  private final double maxRadians = Units.degreesToRadians(0);
 
   private final TalonFX m_intakeMotor;
 
@@ -53,9 +56,11 @@ public class RotateAlgaeSubsystem extends SubsystemBase {
     .d(0)
     .outputRange(-1, 1);
     config.encoder.positionConversionFactor(kIntakeArmEncoderPositionFactor);
-
+    config.idleMode(IdleMode.kBrake);
+    config.smartCurrentLimit(40);
     m_rotateMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    m_positionRadians = m_rotateEncoder.getPosition();
+    
+    m_targetRadians = m_rotateEncoder.getPosition();
 
     ShuffleboardContent.initRotateAlgae(this);
 
@@ -67,42 +72,41 @@ public class RotateAlgaeSubsystem extends SubsystemBase {
   }
 
   public void intakeAlgea() {
-    m_positionRadians = minRotations;
+    m_targetRadians = minRadians;
     setReferencePeriodic();
     m_intakeMotor.set(0.12);
   }
 
   public void stop() {
-    m_positionRadians = maxRotations;
+    m_targetRadians = maxRadians;
     setReferencePeriodic();
     m_intakeMotor.set(0);
   }
 
   public void shootAlgea() {
-    m_positionRadians = maxRotations;
+    m_targetRadians = maxRadians;
     setReferencePeriodic();
     m_intakeMotor.set(-0.1);
   }
 
-  public double getMinRotations() {
-    return minRotations;
+  public double getMinDegrees() {
+    return Units.radiansToDegrees(minRadians);
   }
 
-  public double getMaxRotations() {
-    return maxRotations;
+  public double getMaxDegrees() {
+    return Units.radiansToDegrees(maxRadians);
   }
 
-  public double getPosition() {
-    return m_rotateEncoder.getPosition();
+  public double getActualDegrees() {
+    return Units.radiansToDegrees(m_rotateEncoder.getPosition());
   }
 
-  public void setReferenceValue(double rotation) {
-    m_positionRadians = Units.degreesToRadians(rotation);
+  public double getTargetDegrees() {
+    return Units.radiansToDegrees(m_targetRadians);
   }
 
-  public void setReferencePeriodic() {
-    m_positionRadians = MathUtil.clamp(m_positionRadians, minRotations, maxRotations);
-    m_rotateController.setReference(m_positionRadians, ControlType.kPosition);
+  private void setReferencePeriodic() {
+    m_targetRadians = MathUtil.clamp(m_targetRadians, minRadians, maxRadians);
+    m_rotateController.setReference(m_targetRadians, ControlType.kPosition);
   }
 }
-

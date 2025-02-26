@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
@@ -16,15 +17,16 @@ import frc.robot.utils.ShuffleboardContent;
 
 public class ArmSubsystem extends SubsystemBase {
 
-  public double m_RotateArmPositionRadians;
-  public double m_LinearArmPositionRadians;
-  public double m_WristPositionRadians;
-  public static final double kRotateArmGearRatio = 100 / 1 * 46 / 14;
-  public static final double kRotateArmPositionFactor = (2 * Math.PI) / kRotateArmGearRatio;
-  public static final double kLinearArmGearRatio = 20 / 1;
-  public static final double kLinearArmPositionFactor = (2 * Math.PI) / kLinearArmGearRatio;
-  public static final double kWristGearRatio = 2/1;
-  public static final double kWristPositionFactor = (2 * Math.PI) / kWristGearRatio;
+  private double m_RotateArmTargetRadians;
+  private double m_LinearArmTargetRadians;
+  private double m_WristTargetRadians;
+
+  private static final double kRotateArmGearRatio = 100 / 1 * 46 / 14;
+  private static final double kRotateArmPositionFactor = (2 * Math.PI) / kRotateArmGearRatio;
+  private static final double kLinearArmGearRatio = 20 / 1;
+  private static final double kLinearArmPositionFactor = (2 * Math.PI) / kLinearArmGearRatio;
+  private static final double kWristGearRatio = 2/1;
+  private static final double kWristPositionFactor = (2 * Math.PI) / kWristGearRatio;
 
   private final int m_RotateArmCanId = 52;
   private final int m_LinearArmCanId = 53;
@@ -33,17 +35,21 @@ public class ArmSubsystem extends SubsystemBase {
   private final RelativeEncoder m_RotateArmEncoder;
   private final RelativeEncoder m_LinearArmEncoder;
   private final RelativeEncoder m_WristEncoder;
+
   private final SparkMax m_RotateArmMotor;
   private final SparkMax m_LinearArmMotor;
   private final SparkMax m_WristMotor;
+
   private final SparkClosedLoopController m_RotateArmController;
   private final SparkClosedLoopController m_LinearArmController;
   private final SparkClosedLoopController m_WristController;
 
   private final double m_MinRotateArmRadians = Units.degreesToRadians(-270);
   private final double m_MaxRotateArmRadians = Units.degreesToRadians(270);
+
   private double m_MinLinearArmRadians = Units.degreesToRadians(-720);
   private double m_MaxLinearArmRadians = Units.degreesToRadians(0);
+
   private final double m_MinWristRadians = Units.degreesToRadians(-180);
   private final double m_MaxWristRadians = Units.degreesToRadians(180);
 
@@ -63,40 +69,13 @@ public class ArmSubsystem extends SubsystemBase {
     m_LinearArmController = m_LinearArmMotor.getClosedLoopController();
     m_WristController = m_WristMotor.getClosedLoopController();
 
-    // Config Rotate Arm
-    SparkMaxConfig configRotateArm = new SparkMaxConfig();
-    configRotateArm.closedLoop
-    .p(1.5)
-    .i(0)
-    .d(0)
-    .outputRange(-1, 1);
-    configRotateArm.encoder.positionConversionFactor(kRotateArmPositionFactor);
-    m_RotateArmMotor.configure(configRotateArm, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-    // Config Linear Arm
-    SparkMaxConfig configLinearArm = new SparkMaxConfig();
-    configLinearArm.closedLoop
-    .p(0.5)
-    .i(0)
-    .d(0)
-    .outputRange(-0.3, 0.3);
-    configLinearArm.encoder.positionConversionFactor(kLinearArmPositionFactor);
-    m_LinearArmMotor.configure(configLinearArm, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-    // Config Wrist
-    SparkMaxConfig configWrist = new SparkMaxConfig();
-    configWrist.closedLoop
-    .p(2)
-    .i(0)
-    .d(0)
-    .outputRange(-1, 1);
-    configWrist.encoder.positionConversionFactor(kWristPositionFactor);
-    m_WristMotor.configure(configWrist, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    // Configure Controllers
+    configControllers();
 
     // Set Initial Positions
-    m_RotateArmPositionRadians = m_RotateArmEncoder.getPosition();
-    m_LinearArmPositionRadians = m_LinearArmEncoder.getPosition();
-    m_WristPositionRadians = m_WristEncoder.getPosition();
+    m_RotateArmTargetRadians = m_RotateArmEncoder.getPosition();
+    m_LinearArmTargetRadians = m_LinearArmEncoder.getPosition();
+    m_WristTargetRadians = m_WristEncoder.getPosition();
 
     // Setup Shuffleboard
     ShuffleboardContent.initRotateArm(this);
@@ -109,20 +88,20 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void moveRotateArm(double degrees) {
-    m_RotateArmPositionRadians = Units.degreesToRadians(degrees);
+    m_RotateArmTargetRadians = Units.degreesToRadians(degrees);
     m_MaxLinearArmRadians += Units.degreesToRadians(degrees);
     m_MinLinearArmRadians += Units.degreesToRadians(degrees);
-    m_LinearArmPositionRadians += Units.degreesToRadians(degrees);
+    m_LinearArmTargetRadians += Units.degreesToRadians(degrees);
     setReferencePeriodic();
   }
 
   public void moveLinearArm(double degrees) {
-    m_LinearArmPositionRadians = Units.degreesToRadians(degrees);
+    m_LinearArmTargetRadians = Units.degreesToRadians(degrees);
     setReferencePeriodic();
   }
 
   public void moveWrist(double degrees) {
-    m_WristPositionRadians = Units.degreesToRadians(degrees);
+    m_WristTargetRadians = Units.degreesToRadians(degrees);
     setReferencePeriodic();
   }
 
@@ -154,45 +133,95 @@ public class ArmSubsystem extends SubsystemBase {
     return Units.radiansToDegrees(m_RotateArmEncoder.getPosition());
   }
 
+  public double getRotateArmTargetDegrees() {
+    return Units.radiansToDegrees(m_RotateArmTargetRadians);
+  }
+
   public double getLinearArmDegrees() {
     return Units.radiansToDegrees(m_LinearArmEncoder.getPosition());
+  }
+
+  public double getLinearArmTargetDegrees() {
+    return Units.radiansToDegrees(m_LinearArmTargetRadians);
   }
 
   public double getWristDegrees() {
     return Units.radiansToDegrees(m_WristEncoder.getPosition());
   }
 
-  public void driveRotateArm(double throttle) {
-    if (Math.abs(throttle) > 0.05) {
-      m_RotateArmPositionRadians += Units.degreesToRadians(throttle);
-      m_MaxLinearArmRadians += Units.degreesToRadians(throttle);
-      m_MinLinearArmRadians += Units.degreesToRadians(throttle);
-      m_LinearArmPositionRadians += Units.degreesToRadians(throttle);
+  public double getWristTargetDegrees() {
+    return Units.radiansToDegrees(m_WristTargetRadians);
+  }
+
+  public void driveRotateArm(double degrees) {
+    if (Math.abs(degrees) > 0.05) {
+      m_RotateArmTargetRadians += Units.degreesToRadians(degrees);
+      m_MaxLinearArmRadians += Units.degreesToRadians(degrees);
+      m_MinLinearArmRadians += Units.degreesToRadians(degrees);
+      m_LinearArmTargetRadians += Units.degreesToRadians(degrees);
     }
     setReferencePeriodic();
   }
 
-  public void driveLinearArm(double throttle) {
-    if (Math.abs(throttle) > 0.05) {
-      m_LinearArmPositionRadians += Units.degreesToRadians(throttle * 10);
+  public void driveLinearArm(double degrees) {
+    if (Math.abs(degrees) > 0.05) {
+      m_LinearArmTargetRadians += Units.degreesToRadians(degrees * 10);
     }
     setReferencePeriodic();
   }
 
-  public void driveWrist(double throttle) {
-    if (Math.abs(throttle) > 0.05) {
-      m_WristPositionRadians += Units.degreesToRadians(throttle * 2);
+  public void driveWrist(double degrees) {
+    if (Math.abs(degrees) > 0.05) {
+      m_WristTargetRadians += Units.degreesToRadians(degrees * 2);
     }
     setReferencePeriodic();
   }
 
-  public void setReferencePeriodic() {
-    m_RotateArmPositionRadians = MathUtil.clamp(m_RotateArmPositionRadians, m_MinRotateArmRadians, m_MaxRotateArmRadians);
-    m_LinearArmPositionRadians = MathUtil.clamp(m_LinearArmPositionRadians, m_MinLinearArmRadians, m_MaxLinearArmRadians);
-    m_WristPositionRadians = MathUtil.clamp(m_WristPositionRadians, m_MinWristRadians, m_MaxWristRadians);
+  private void setReferencePeriodic() {
+    m_RotateArmTargetRadians = MathUtil.clamp(m_RotateArmTargetRadians, m_MinRotateArmRadians, m_MaxRotateArmRadians);
+    m_LinearArmTargetRadians = MathUtil.clamp(m_LinearArmTargetRadians, m_MinLinearArmRadians, m_MaxLinearArmRadians);
+    m_WristTargetRadians = MathUtil.clamp(m_WristTargetRadians, m_MinWristRadians, m_MaxWristRadians);
 
-    m_RotateArmController.setReference(m_RotateArmPositionRadians, ControlType.kPosition);
-    m_LinearArmController.setReference(m_LinearArmPositionRadians, ControlType.kPosition);
-    m_WristController.setReference(m_WristPositionRadians, ControlType.kPosition);
+    m_RotateArmController.setReference(m_RotateArmTargetRadians, ControlType.kPosition);
+    m_LinearArmController.setReference(m_LinearArmTargetRadians, ControlType.kPosition);
+    m_WristController.setReference(m_WristTargetRadians, ControlType.kPosition);
+  }
+
+  private void configControllers() {
+    // Config Rotate Arm
+    SparkMaxConfig configRotateArm = new SparkMaxConfig();
+    configRotateArm.closedLoop
+    .p(1.5)
+    .i(0)
+    .d(0)
+    .outputRange(-1, 1);
+    configRotateArm.encoder.positionConversionFactor(kRotateArmPositionFactor);
+    configRotateArm.idleMode(IdleMode.kBrake);
+    configRotateArm.smartCurrentLimit(40);
+    m_RotateArmMotor.configure(configRotateArm, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    // Config Linear Arm
+    SparkMaxConfig configLinearArm = new SparkMaxConfig();
+    configLinearArm.closedLoop
+    .p(0.5)
+    .i(0)
+    .d(0)
+    .outputRange(-0.3, 0.3);
+    configLinearArm.encoder.positionConversionFactor(kLinearArmPositionFactor);
+    configLinearArm.idleMode(IdleMode.kBrake);
+    configLinearArm.smartCurrentLimit(40);
+    m_LinearArmMotor.configure(configLinearArm, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    // Config Wrist
+    SparkMaxConfig configWrist = new SparkMaxConfig();
+    configWrist.closedLoop
+    .p(2)
+    .i(0)
+    .d(0)
+    .outputRange(-1, 1);
+    configWrist.encoder.positionConversionFactor(kWristPositionFactor);
+    configWrist.idleMode(IdleMode.kBrake);
+    configWrist.smartCurrentLimit(40);
+    m_WristMotor.configure(configWrist, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 }

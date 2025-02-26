@@ -4,7 +4,6 @@
 
 package frc.robot.utils;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -28,7 +27,7 @@ public class ShuffleboardContent {
                 drLayout1.addNumber("Angle", () -> drive.getRotateArmDegrees())
                         .withPosition(1, 1)
                         .withSize(2, 1);
-                drLayout1.addNumber("Target Angle", () -> Units.radiansToDegrees(drive.m_RotateArmPositionRadians))
+                drLayout1.addNumber("Target Angle", () -> drive.getRotateArmTargetDegrees())
                         .withPosition(1, 2)
                         .withSize(2, 1);
                 drLayout1.addNumber("Min Angle", () -> drive.getMinRotateArmDegrees())
@@ -42,16 +41,16 @@ public class ShuffleboardContent {
         public static void initBallScrew(BallScrewSubsystem drive) {
                 ShuffleboardTab drLayout1 = Shuffleboard.getTab("Ball Screw");
 
-                drLayout1.addNumber("Distance", () -> drive.getPosition())
+                drLayout1.addNumber("Distance", () -> drive.getActualUnits())
                         .withPosition(1, 1)
                         .withSize(2, 1);
-                drLayout1.addNumber("Target Distance", () -> drive.m_positionInches)
+                drLayout1.addNumber("Target Distance", () -> drive.m_positionUnits)
                         .withPosition(1, 2)
                         .withSize(2, 1);
-                drLayout1.addNumber("Min Distance", () -> drive.getMinDistance())
+                drLayout1.addNumber("Min Distance", () -> drive.getMinUnits())
                         .withPosition(1, 3)
                         .withSize(2, 1);
-                drLayout1.addNumber("Max Distance", () -> drive.getMaxDistance())
+                drLayout1.addNumber("Max Distance", () -> drive.getMaxUnits())
                         .withPosition(1, 4)
                         .withSize(2, 1);
         }
@@ -62,7 +61,7 @@ public class ShuffleboardContent {
                 drLayout1.addNumber("Angle", () -> drive.getLinearArmDegrees())
                         .withPosition(1, 1)
                         .withSize(2, 1);
-                drLayout1.addNumber("Target Angle", () -> Units.radiansToDegrees(drive.m_LinearArmPositionRadians))
+                drLayout1.addNumber("Target Angle", () -> drive.getLinearArmTargetDegrees())
                         .withPosition(1, 2)
                         .withSize(2, 1);
                 drLayout1.addNumber("Min Angle", () -> drive.getMinLinearArmDegrees())
@@ -76,16 +75,16 @@ public class ShuffleboardContent {
         public static void initClimber(ClimberSubsystem drive) {
                 ShuffleboardTab drLayout1 = Shuffleboard.getTab("Climber");
 
-                drLayout1.addNumber("Angle", () -> Units.radiansToDegrees(drive.getPosition()))
+                drLayout1.addNumber("Angle", () -> drive.getActualDegrees())
                         .withPosition(1, 1)
                         .withSize(2, 1);
-                drLayout1.addNumber("Target Angle", () -> Units.radiansToDegrees(drive.m_positionRadians))
+                drLayout1.addNumber("Target Angle", () -> drive.getTargetDegrees())
                         .withPosition(1, 2)
                         .withSize(2, 1);
-                drLayout1.addNumber("Min Angle", () -> Units.radiansToDegrees(drive.getMinRotations()))
+                drLayout1.addNumber("Min Angle", () -> drive.getMinDegrees())
                         .withPosition(1, 3)
                         .withSize(2, 1);
-                drLayout1.addNumber("Max Angle", () -> Units.radiansToDegrees(drive.getMaxRotations()))
+                drLayout1.addNumber("Max Angle", () -> drive.getMaxDegrees())
                         .withPosition(1, 4)
                         .withSize(2, 1);
         }
@@ -93,16 +92,16 @@ public class ShuffleboardContent {
         public static void initRotateAlgae(RotateAlgaeSubsystem drive) {
                 ShuffleboardTab drLayout1 = Shuffleboard.getTab("Algae");
 
-                drLayout1.addNumber("Angle", () -> Units.radiansToDegrees(drive.getPosition()))
+                drLayout1.addNumber("Angle", () -> drive.getActualDegrees())
                         .withPosition(1, 1)
                         .withSize(2, 1);
-                drLayout1.addNumber("Target Angle", () -> Units.radiansToDegrees(drive.m_positionRadians))
+                drLayout1.addNumber("Target Angle", () -> drive.getTargetDegrees())
                         .withPosition(1, 2)
                         .withSize(2, 1);
-                drLayout1.addNumber("Min Angle", () -> Units.radiansToDegrees(drive.getMinRotations()))
+                drLayout1.addNumber("Min Angle", () -> drive.getMinDegrees())
                         .withPosition(1, 3)
                         .withSize(2, 1);
-                drLayout1.addNumber("Max Angle", () -> Units.radiansToDegrees(drive.getMaxRotations()))
+                drLayout1.addNumber("Max Angle", () -> drive.getMaxDegrees())
                         .withPosition(1, 4)
                         .withSize(2, 1);
         }
@@ -113,7 +112,7 @@ public class ShuffleboardContent {
                 drLayout1.addNumber("Angle", () -> drive.getWristDegrees())
                         .withPosition(1, 1)
                         .withSize(2, 1);
-                drLayout1.addNumber("Target Angle", () -> Units.radiansToDegrees(drive.m_WristPositionRadians))
+                drLayout1.addNumber("Target Angle", () -> drive.getWristTargetDegrees())
                         .withPosition(1, 2)
                         .withSize(2, 1);
                 drLayout1.addNumber("Min Angle", () -> drive.getMinWristDegrees())
