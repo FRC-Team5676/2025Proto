@@ -108,7 +108,7 @@ public class RobotContainer {
             .and(operator.button(XboxController.Button.kX.value))
             .onTrue(armCommands.moveToHome());
         //operator.button(XboxController.Button.kX.value).onTrue(armCommands.moveToHome());
-        operator.button(XboxController.Button.kY.value).onTrue(armCommands.moveToL2());
+        operator.button(XboxController.Button.kY.value).onTrue(armCommands.moveToL4());
 
         // Algea
         operator.povDown().onTrue(new InstantCommand(rotateAlgae::intakeAlgea));

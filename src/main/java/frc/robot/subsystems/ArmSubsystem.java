@@ -221,7 +221,7 @@ public class ArmSubsystem extends SubsystemBase {
     // Config Rotate Arm
     SparkMaxConfig configRotateArm = new SparkMaxConfig();
     configRotateArm.closedLoop
-    .p(1.5)
+    .p(3)
     .i(0)
     .d(0)
     .outputRange(-1, 1);
@@ -245,7 +245,7 @@ public class ArmSubsystem extends SubsystemBase {
     // Config Wrist
     SparkMaxConfig configWrist = new SparkMaxConfig();
     configWrist.closedLoop
-    .p(4)
+    .p(2)
     .i(0)
     .d(0)
     .outputRange(-1, 1);

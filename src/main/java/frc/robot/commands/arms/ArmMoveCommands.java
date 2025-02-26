@@ -37,9 +37,9 @@ public class ArmMoveCommands extends Command {
         return Commands.sequence(
             Commands.parallel(
                 new InstantCommand(() -> m_Arm.moveRotateArm(0)),
-                new InstantCommand(() -> m_Arm.moveWrist(105))
+                new InstantCommand(() -> m_Arm.moveWrist(120))
             ),
-            Commands.waitSeconds(0.5),
+            Commands.waitSeconds(0.75),
             Commands.parallel(
                 new InstantCommand(() -> m_Arm.moveRotateArm(-28)),
                 new InstantCommand(() -> m_Arm.moveWrist(90))
@@ -48,49 +48,21 @@ public class ArmMoveCommands extends Command {
 }
 
     public Command moveToL2() {
-        double timeOut = 0.0;
-        if (m_BallScrew.belowMidPosition()) {
-            timeOut = 1.0;
-        }
-        return Commands.sequence(
-            new InstantCommand(() -> m_BallScrew.moveToUpPosition()),
-            Commands.waitSeconds(timeOut),
-            Commands.parallel(
-                new InstantCommand(() -> m_Arm.moveWrist(0)),
-                new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getRetractedLinearArmDegrees())),
-                new InstantCommand(() -> m_Arm.moveRotateArm(72))
-            )
-        );
+        return moveToHome();
     }
 
-    public Command MoveToL3() {
-        double timeOut = 0.0;
-        if (m_BallScrew.belowMidPosition()) {
-            timeOut = 1.0;
-        }
-        return Commands.sequence(
-            new InstantCommand(() -> m_BallScrew.moveToUpPosition()),
-            Commands.waitSeconds(timeOut),
-            Commands.parallel(
-                new InstantCommand(() -> m_Arm.moveWrist(0)),
-                new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getExtendedLinearArmDegrees())),
-                new InstantCommand(() -> m_Arm.moveRotateArm(-72))
-            )
-        );
+    public Command moveToL3() {
+        return moveToHome();
     }
 
-    public Command MoveToL4() {
-        double timeOut = 0.0;
-        if (m_BallScrew.belowMidPosition()) {
-            timeOut = 1.0;
-        }
+    public Command moveToL4() {
         return Commands.sequence(
             new InstantCommand(() -> m_BallScrew.moveToUpPosition()),
-            Commands.waitSeconds(timeOut),
+            Commands.waitSeconds(1),
             Commands.parallel(
-                new InstantCommand(() -> m_Arm.moveWrist(0)),
-                new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getRetractedLinearArmDegrees())),
-                new InstantCommand(() -> m_Arm.moveRotateArm(-72))
+                new InstantCommand(() -> m_Arm.moveRotateArm(-160)),
+                new InstantCommand(() -> m_Arm.moveLinearArm(-782)),
+                new InstantCommand(() -> m_Arm.moveWrist(-135))
             )
         );
     }
