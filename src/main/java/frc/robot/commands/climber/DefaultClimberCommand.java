@@ -2,19 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.subsystems.ClimberSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class MoveClimberCommand extends Command {
+public class DefaultClimberCommand extends Command {
   /** Creates a new Climber. */
   private final ClimberSubsystem m_controlArm;
   private final CommandJoystick m_controller;
 
-  public MoveClimberCommand(ClimberSubsystem controlArm, CommandJoystick controller) {
+  public DefaultClimberCommand(ClimberSubsystem controlArm, CommandJoystick controller) {
     m_controlArm = controlArm;
     m_controller = controller;
 

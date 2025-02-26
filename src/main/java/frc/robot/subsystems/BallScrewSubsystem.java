@@ -20,8 +20,8 @@ public class BallScrewSubsystem extends SubsystemBase {
 
   private final WPI_TalonSRX m_driveMotor;
 
-  private final double minDistance = -540000;
-  private final double maxDistance = 3380;
+  private final double minDistance = -540000; //-540000;
+  private final double maxDistance = 3938; //3938;
 
   public BallScrewSubsystem() {
     // Drive Motor setup
@@ -37,8 +37,8 @@ public class BallScrewSubsystem extends SubsystemBase {
 
     // Encoder setup
     m_driveMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
-    m_driveMotor.setInverted(false);
-    m_driveMotor.setSensorPhase(false);
+    m_driveMotor.setInverted(true);
+    m_driveMotor.setSensorPhase(true);
     m_driveMotor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, 30);
     m_driveMotor.configPeakOutputForward(1);
     m_driveMotor.configPeakOutputReverse(-1);

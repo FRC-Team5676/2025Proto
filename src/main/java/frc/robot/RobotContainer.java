@@ -22,9 +22,10 @@ import edu.wpi.first.wpilibj2.command.WrapperCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.commands.MoveClimberCommand;
 import frc.robot.commands.arms.ArmMoveCommands;
-import frc.robot.commands.arms.MoveArmCommand;
+import frc.robot.commands.arms.DefaultArmCommand;
+import frc.robot.commands.arms.DefaultBallScrewCommand;
+import frc.robot.commands.climber.DefaultClimberCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BallScrewSubsystem;
@@ -91,8 +92,9 @@ public class RobotContainer {
         driver.button(8).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         // Variable Position Commands
-        climber.setDefaultCommand(new MoveClimberCommand(climber, driver));
-        arm.setDefaultCommand(new MoveArmCommand(arm, operator));
+        climber.setDefaultCommand(new DefaultClimberCommand(climber, driver));
+        arm.setDefaultCommand(new DefaultArmCommand(arm, operator));
+        // ballScrew.setDefaultCommand(new DefaultBallScrewCommand(ballScrew, operator));
 
         // Linear Arm Presets
         operator.button(XboxController.Button.kLeftBumper.value).onTrue(new InstantCommand(ballScrew::moveToDownPosition));

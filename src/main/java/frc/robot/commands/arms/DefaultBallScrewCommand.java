@@ -1,20 +1,21 @@
 package frc.robot.commands.arms;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.BallScrewSubsystem;
 
-public class MoveArmCommand extends Command {
+public class DefaultBallScrewCommand extends Command {
 
-    private final ArmSubsystem m_Arm;
+    private final BallScrewSubsystem m_controlArm;
     private final CommandXboxController m_controller;
 
     /** Driver control */
-    public MoveArmCommand(ArmSubsystem arm, CommandXboxController controller) {
-        m_Arm = arm;
+    public DefaultBallScrewCommand(BallScrewSubsystem controlArm, CommandXboxController controller) {
+        m_controlArm = controlArm;
         m_controller = controller;
 
-        addRequirements(arm);
+        addRequirements(controlArm);
     }
 
     // Called when the command is initially scheduled.
@@ -25,12 +26,16 @@ public class MoveArmCommand extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_Arm.driveRotateArm(m_controller.getRightY());
-
-        double trigger = m_controller.getLeftTriggerAxis() - m_controller.getRightTriggerAxis();
-        m_Arm.driveLinearArm(trigger);
+        double trigger = 0.0;
+        if (m_controller.button(XboxController.Button.kRightBumper.value).getAsBoolean()) {
+          trigger = -1;
+        } else if (m_controller.button(XboxController.Button.kLeftBumper.value).getAsBoolean()) {
+          trigger = 1;
+        } else {
+          trigger = 0;
+        }
         
-        m_Arm.driveWrist(m_controller.getLeftY());
+        m_controlArm.driveArm(trigger);
     }
 
     // Called once the command ends or is interrupted.
