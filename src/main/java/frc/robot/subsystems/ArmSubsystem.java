@@ -148,10 +148,12 @@ public class ArmSubsystem extends SubsystemBase {
   // Drive Rotate Arm
   public void moveRotateArm(double degrees) {
     m_RotateArmTargetRadians = Units.degreesToRadians(degrees);
+
     m_retractedLinearArmRadians += Units.degreesToRadians(degrees);
     m_pickupLinearArmRadians += Units.degreesToRadians(degrees);
     m_ExtendedLinearArmRadians += Units.degreesToRadians(degrees);
     m_LinearArmTargetRadians += Units.degreesToRadians(degrees);
+
     if (m_RotateArmTargetRadians >= m_MaxRotateZoneRadians || m_RotateArmTargetRadians <= m_MinRotateZoneRadians) {
       m_LinearArmTargetRadians = m_retractedLinearArmRadians;
     } 
@@ -162,10 +164,12 @@ public class ArmSubsystem extends SubsystemBase {
   public void driveRotateArm(double degrees) {
     if (Math.abs(degrees) > 0.05) {
       m_RotateArmTargetRadians += Units.degreesToRadians(degrees);
+
       m_retractedLinearArmRadians += Units.degreesToRadians(degrees);
       m_pickupLinearArmRadians += Units.degreesToRadians(degrees);
       m_ExtendedLinearArmRadians += Units.degreesToRadians(degrees);
       m_LinearArmTargetRadians += Units.degreesToRadians(degrees);
+      
       if (m_RotateArmTargetRadians >= m_MaxRotateZoneRadians || m_RotateArmTargetRadians <= m_MinRotateZoneRadians) {
         m_LinearArmTargetRadians = m_retractedLinearArmRadians;
       } 
