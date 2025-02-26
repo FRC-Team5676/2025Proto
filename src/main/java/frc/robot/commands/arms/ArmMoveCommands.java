@@ -34,21 +34,18 @@ public class ArmMoveCommands extends Command {
     }
 
     public Command pickupCoral() {
-        if (m_BallScrew.atDownPosition()) {
-            return Commands.sequence(
-                Commands.parallel(
-                    new InstantCommand(() -> m_Arm.moveRotateArm(0)),
-                    new InstantCommand(() -> m_Arm.moveWrist(105))
-                ),
-                Commands.waitSeconds(0.5),
-                Commands.parallel(
-                    new InstantCommand(() -> m_Arm.moveRotateArm(-28)),
-                    new InstantCommand(() -> m_Arm.moveWrist(90))
-                )
-            );
-        }
-        return moveToHome();
-    }
+        return Commands.sequence(
+            Commands.parallel(
+                new InstantCommand(() -> m_Arm.moveRotateArm(0)),
+                new InstantCommand(() -> m_Arm.moveWrist(105))
+            ),
+            Commands.waitSeconds(0.5),
+            Commands.parallel(
+                new InstantCommand(() -> m_Arm.moveRotateArm(-28)),
+                new InstantCommand(() -> m_Arm.moveWrist(90))
+            )
+        );
+}
 
     public Command moveToL2() {
         double timeOut = 0.0;
