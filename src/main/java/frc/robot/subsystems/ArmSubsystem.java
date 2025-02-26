@@ -50,7 +50,7 @@ public class ArmSubsystem extends SubsystemBase {
   private final double m_MaxRotateZoneRadians = Units.degreesToRadians(80);
 
   private double m_ExtendedLinearArmRadians = Units.degreesToRadians(-720);
-  private double m_pickupLinearArmRadians = Units.degreesToRadians(-462);
+  private double m_PickupLinearArmRadians = Units.degreesToRadians(-462);
   private double m_retractedLinearArmRadians = Units.degreesToRadians(0);
 
   private final double m_MinWristRadians = Units.degreesToRadians(-180);
@@ -113,7 +113,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public double getPickupLinearArmDegrees() {
-    return Units.radiansToDegrees(m_pickupLinearArmRadians);
+    return Units.radiansToDegrees(m_PickupLinearArmRadians);
   }
 
   public double getRetractedLinearArmDegrees() {
@@ -151,7 +151,6 @@ public class ArmSubsystem extends SubsystemBase {
       m_RotateArmTargetRadians += Units.degreesToRadians(degrees);
 
       m_retractedLinearArmRadians += Units.degreesToRadians(degrees);
-      m_pickupLinearArmRadians += Units.degreesToRadians(degrees);
       m_ExtendedLinearArmRadians += Units.degreesToRadians(degrees);
       m_LinearArmTargetRadians += Units.degreesToRadians(degrees);
 
@@ -163,12 +162,16 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void moveRotateArm(double degrees) {
-    m_RotateArmTargetRadians = Units.degreesToRadians(degrees);
+    double oldRadians = m_RotateArmTargetRadians;
+    double newRadians = Units.degreesToRadians(degrees);
+    double adjRadians = newRadians - oldRadians;
 
-    m_retractedLinearArmRadians += Units.degreesToRadians(degrees);
-    m_pickupLinearArmRadians += Units.degreesToRadians(degrees);
-    m_ExtendedLinearArmRadians += Units.degreesToRadians(degrees);
-    m_LinearArmTargetRadians += Units.degreesToRadians(degrees);
+    m_RotateArmTargetRadians = newRadians;
+
+    m_retractedLinearArmRadians += adjRadians;
+    m_PickupLinearArmRadians += adjRadians;
+    m_ExtendedLinearArmRadians += adjRadians;
+    m_LinearArmTargetRadians += adjRadians;
 
     if (m_RotateArmTargetRadians >= m_MaxRotateZoneRadians || m_RotateArmTargetRadians <= m_MinRotateZoneRadians) {
       m_LinearArmTargetRadians = m_retractedLinearArmRadians;
@@ -230,7 +233,7 @@ public class ArmSubsystem extends SubsystemBase {
     // Config Linear Arm
     SparkMaxConfig configLinearArm = new SparkMaxConfig();
     configLinearArm.closedLoop
-    .p(0.5)
+    .p(1)
     .i(0)
     .d(0)
     .outputRange(-0.3, 0.3);
@@ -242,7 +245,7 @@ public class ArmSubsystem extends SubsystemBase {
     // Config Wrist
     SparkMaxConfig configWrist = new SparkMaxConfig();
     configWrist.closedLoop
-    .p(2)
+    .p(4)
     .i(0)
     .d(0)
     .outputRange(-1, 1);
