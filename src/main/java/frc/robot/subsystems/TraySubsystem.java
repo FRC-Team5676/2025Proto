@@ -82,7 +82,7 @@ public class TraySubsystem extends SubsystemBase {
   }
 
   private void setReferencePeriodic() {
-    m_TargetRadians = MathUtil.clamp(m_TargetRadians, trayDownPosition, trayUpPosition);
+    m_TargetRadians = MathUtil.clamp(m_TargetRadians, trayUpPosition, trayDownPosition);
     m_driveMotor.set(ControlMode.Position, m_TargetRadians);
   }
 }
