@@ -20,7 +20,7 @@ public class TraySubsystem extends SubsystemBase {
   private final WPI_TalonSRX m_driveMotor;
 
   private final double trayUpPosition = Units.degreesToRadians(-300);
-  private final double trayDownPosition = Units.degreesToRadians(-300);
+  private final double trayDownPosition = Units.degreesToRadians(300);
 
   public TraySubsystem() {
     // Drive Motor setup
@@ -67,6 +67,11 @@ public class TraySubsystem extends SubsystemBase {
 
   public double getDownPosition() {
     return trayDownPosition;
+  }
+
+  public void driveTray(double degrees) {
+    m_TargetRadians += Units.degreesToRadians(degrees * 10);
+    setReferencePeriodic();
   }
 
   public double getActualDegrees() {

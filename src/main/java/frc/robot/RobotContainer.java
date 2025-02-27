@@ -26,12 +26,14 @@ import frc.robot.commands.arms.ArmMoveCommands;
 import frc.robot.commands.arms.DefaultArmCommand;
 import frc.robot.commands.arms.DefaultBallScrewCommand;
 import frc.robot.commands.climber.DefaultClimberCommand;
+import frc.robot.commands.tray.DefaultTrayCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BallScrewSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.RotateAlgaeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.TraySubsystem;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -40,6 +42,7 @@ public class RobotContainer {
 
     private final ArmSubsystem arm = new ArmSubsystem();
     private final BallScrewSubsystem ballScrew = new BallScrewSubsystem();
+    private final TraySubsystem tray = new TraySubsystem();
     private final ClimberSubsystem climber = new ClimberSubsystem();
     private final RotateAlgaeSubsystem rotateAlgae = new RotateAlgaeSubsystem();
 
@@ -95,10 +98,15 @@ public class RobotContainer {
         climber.setDefaultCommand(new DefaultClimberCommand(climber, driver));
         arm.setDefaultCommand(new DefaultArmCommand(arm, operator));
         // ballScrew.setDefaultCommand(new DefaultBallScrewCommand(ballScrew, operator));
+        tray.setDefaultCommand(new DefaultTrayCommand(tray, operator));
 
-        // Linear Arm Presets
+        // Ball Screw
         operator.button(XboxController.Button.kLeftBumper.value).onTrue(new InstantCommand(ballScrew::moveToDownPosition));
         operator.button(XboxController.Button.kRightBumper.value).onTrue(new InstantCommand(ballScrew::moveToUpPosition));
+
+        // Tray
+        //operator.povUp().onTrue(new InstantCommand(tray::moveToUpPosition));
+        //operator.povRight().onTrue(new InstantCommand(tray::moveToDownPosition));
 
         // Move Arms
         operator.button(XboxController.Button.kBack.value).onTrue(armCommands.moveToZero());
