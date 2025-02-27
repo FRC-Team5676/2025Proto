@@ -29,7 +29,7 @@ public class TraySubsystem extends SubsystemBase {
     m_driveMotor.setNeutralMode(NeutralMode.Brake);
 
     // PID Setup
-    m_driveMotor.config_kP(0, 0.04);
+    m_driveMotor.config_kP(0, 0.5);
     m_driveMotor.config_kI(0, 0);
     m_driveMotor.config_kD(0, 0);
     m_driveMotor.config_kF(0, 0);
