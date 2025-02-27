@@ -60,8 +60,6 @@ public class ArmMoveCommands extends Command {
 
     public Command moveToL2() {
         return Commands.sequence(
-            new InstantCommand(() -> m_BallScrew.moveToDownPosition()),
-            Commands.waitSeconds(1),
             Commands.parallel(
                 new InstantCommand(() -> m_Arm.moveRotateArm(-197)),
                 new InstantCommand(() -> m_Arm.moveLinearArmL2()),
@@ -72,8 +70,6 @@ public class ArmMoveCommands extends Command {
 
     public Command moveToL3() {
         return Commands.sequence(
-            new InstantCommand(() -> m_BallScrew.moveToDownPosition()),
-            Commands.waitSeconds(1),
             Commands.parallel(
                 new InstantCommand(() -> m_Arm.moveRotateArm(-109)),
                 new InstantCommand(() -> m_Arm.moveLinearArmL3()),
@@ -91,6 +87,15 @@ public class ArmMoveCommands extends Command {
                 new InstantCommand(() -> m_Arm.moveLinearArmL4()),
                 new InstantCommand(() -> m_Arm.moveWrist(-135))
             )
+        );
+    }
+
+    public Command placeL4() {
+        return Commands.sequence(
+            new InstantCommand(() -> m_Arm.moveLinearArmL4()),
+            Commands.waitSeconds(1),
+            new InstantCommand(() -> m_Arm.moveLinearArmRetracted()),
+            new InstantCommand(() -> m_Arm.moveRotateArm(-140))
         );
     }
 
