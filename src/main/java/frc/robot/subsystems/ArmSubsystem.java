@@ -51,6 +51,8 @@ public class ArmSubsystem extends SubsystemBase {
 
   private double m_ExtendedLinearArmRadians = Units.degreesToRadians(-720);
   private double m_PickupLinearArmRadians = Units.degreesToRadians(-434);
+  private double m_L2LinearArmRadians = Units.degreesToRadians(-3);
+  private double m_L3LinearArmRadians = Units.degreesToRadians(-244);
   private double m_L4LinearArmRadians = Units.degreesToRadians(-622);
   private double m_RetractedLinearArmRadians = Units.degreesToRadians(0);
 
@@ -157,6 +159,8 @@ public class ArmSubsystem extends SubsystemBase {
 
       m_RetractedLinearArmRadians += Units.degreesToRadians(degrees);
       m_PickupLinearArmRadians += Units.degreesToRadians(degrees);
+      m_L2LinearArmRadians += Units.degreesToRadians(degrees);
+      m_L3LinearArmRadians += Units.degreesToRadians(degrees);
       m_L4LinearArmRadians += Units.degreesToRadians(degrees);
       m_ExtendedLinearArmRadians += Units.degreesToRadians(degrees);
       m_LinearArmTargetRadians += Units.degreesToRadians(degrees);
@@ -177,6 +181,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     m_RetractedLinearArmRadians += adjRadians;
     m_PickupLinearArmRadians += adjRadians;
+    m_L2LinearArmRadians += adjRadians;
+    m_L3LinearArmRadians += adjRadians;
     m_L4LinearArmRadians += adjRadians;
     m_ExtendedLinearArmRadians += adjRadians;
     m_LinearArmTargetRadians += adjRadians;
@@ -203,6 +209,16 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void moveLinearArmPickup() {
     m_LinearArmTargetRadians = m_PickupLinearArmRadians;
+    setReferencePeriodic();
+  }
+
+  public void moveLinearArmL2() {
+    m_LinearArmTargetRadians = m_L2LinearArmRadians;
+    setReferencePeriodic();
+  }
+
+  public void moveLinearArmL3() {
+    m_LinearArmTargetRadians = m_L3LinearArmRadians;
     setReferencePeriodic();
   }
 

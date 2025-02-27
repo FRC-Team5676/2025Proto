@@ -59,11 +59,27 @@ public class ArmMoveCommands extends Command {
 }
 
     public Command moveToL2() {
-        return moveToHome();
+        return Commands.sequence(
+            new InstantCommand(() -> m_BallScrew.moveToDownPosition()),
+            Commands.waitSeconds(1),
+            Commands.parallel(
+                new InstantCommand(() -> m_Arm.moveRotateArm(-197)),
+                new InstantCommand(() -> m_Arm.moveLinearArmL2()),
+                new InstantCommand(() -> m_Arm.moveWrist(-66))
+            )
+        );
     }
 
     public Command moveToL3() {
-        return moveToHome();
+        return Commands.sequence(
+            new InstantCommand(() -> m_BallScrew.moveToDownPosition()),
+            Commands.waitSeconds(1),
+            Commands.parallel(
+                new InstantCommand(() -> m_Arm.moveRotateArm(-109)),
+                new InstantCommand(() -> m_Arm.moveLinearArmL3()),
+                new InstantCommand(() -> m_Arm.moveWrist(10))
+            )
+        );
     }
 
     public Command moveToL4() {
