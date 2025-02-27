@@ -38,7 +38,7 @@ public class TraySubsystem extends SubsystemBase {
     m_driveMotor.setInverted(false);
     m_driveMotor.setSensorPhase(false);
     m_driveMotor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, 30);
-    m_driveMotor.configPeakOutputForward(1);
+    m_driveMotor.configPeakOutputForward(0.3);
     m_driveMotor.configPeakOutputReverse(-1);
     
     m_TargetRadians = m_driveMotor.getSelectedSensorPosition();
