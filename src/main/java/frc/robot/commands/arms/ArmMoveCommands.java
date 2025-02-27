@@ -47,7 +47,7 @@ public class ArmMoveCommands extends Command {
     public Command pickupCoral() {
         return Commands.sequence(
             Commands.parallel(
-                new InstantCommand(() -> m_Arm.moveRotateArm(0)),
+                new InstantCommand(() -> m_Arm.moveRotateArm(3)),
                 new InstantCommand(() -> m_Arm.moveWrist(120))
             ),
             Commands.waitSeconds(0.75),

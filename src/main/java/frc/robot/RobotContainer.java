@@ -97,16 +97,16 @@ public class RobotContainer {
         // Variable Position Commands
         climber.setDefaultCommand(new DefaultClimberCommand(climber, driver));
         arm.setDefaultCommand(new DefaultArmCommand(arm, operator));
-        // ballScrew.setDefaultCommand(new DefaultBallScrewCommand(ballScrew, operator));
-        tray.setDefaultCommand(new DefaultTrayCommand(tray, operator));
+        ballScrew.setDefaultCommand(new DefaultBallScrewCommand(ballScrew, operator));
+        //tray.setDefaultCommand(new DefaultTrayCommand(tray, operator));
 
         // Ball Screw
-        operator.button(XboxController.Button.kLeftBumper.value).onTrue(new InstantCommand(ballScrew::moveToDownPosition));
-        operator.button(XboxController.Button.kRightBumper.value).onTrue(new InstantCommand(ballScrew::moveToUpPosition));
+        //operator.button(XboxController.Button.kLeftBumper.value).onTrue(new InstantCommand(ballScrew::moveToDownPosition));
+        //operator.button(XboxController.Button.kRightBumper.value).onTrue(new InstantCommand(ballScrew::moveToUpPosition));
 
         // Tray
-        //operator.povUp().onTrue(new InstantCommand(tray::moveToUpPosition));
-        //operator.povRight().onTrue(new InstantCommand(tray::moveToDownPosition));
+        operator.povUp().onFalse(new InstantCommand(tray::moveToUpPosition));
+        operator.povUp().whileTrue(new InstantCommand(tray::moveToDownPosition));
 
         // Move Arms
         operator.button(XboxController.Button.kBack.value).onTrue(armCommands.moveToZero());
@@ -118,7 +118,6 @@ public class RobotContainer {
             .onTrue(armCommands.pickupCoral());
         operator.button(XboxController.Button.kA.value).onTrue(armCommands.moveToL2());
         operator.button(XboxController.Button.kB.value).onTrue(armCommands.moveToL3());
-        //operator.button(XboxController.Button.kY.value).onTrue(armCommands.moveToL4());
         operator.povCenter()
             .and(operator.button(XboxController.Button.kY.value))
             .onTrue(armCommands.moveToL4());

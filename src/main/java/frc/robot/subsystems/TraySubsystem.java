@@ -18,8 +18,8 @@ public class TraySubsystem extends SubsystemBase {
 
   private final WPI_TalonSRX m_driveMotor;
 
-  private final double trayUpPosition = 3200;
-  private final double trayDownPosition = 4000;
+  private final double trayUpPosition = 600;
+  private final double trayDownPosition = 1400;
 
   public TraySubsystem() {
     // Drive Motor setup
