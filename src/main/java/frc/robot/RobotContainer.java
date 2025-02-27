@@ -101,13 +101,15 @@ public class RobotContainer {
         operator.button(XboxController.Button.kRightBumper.value).onTrue(new InstantCommand(ballScrew::moveToUpPosition));
 
         // Move Arms
-        operator.povLeft()
-            .and(operator.button(XboxController.Button.kX.value))
-            .onTrue(armCommands.pickupCoral());
+        operator.button(XboxController.Button.kBack.value).onTrue(armCommands.moveToZero());
         operator.povCenter()
             .and(operator.button(XboxController.Button.kX.value))
             .onTrue(armCommands.moveToHome());
-        //operator.button(XboxController.Button.kX.value).onTrue(armCommands.moveToHome());
+        operator.povLeft()
+            .and(operator.button(XboxController.Button.kX.value))
+            .onTrue(armCommands.pickupCoral());
+        operator.button(XboxController.Button.kA.value).onTrue(armCommands.moveToL2());
+        operator.button(XboxController.Button.kB.value).onTrue(armCommands.moveToL3());
         operator.button(XboxController.Button.kY.value).onTrue(armCommands.moveToL4());
 
         // Algea

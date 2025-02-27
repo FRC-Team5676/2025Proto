@@ -50,8 +50,9 @@ public class ArmSubsystem extends SubsystemBase {
   private final double m_MaxRotateZoneRadians = Units.degreesToRadians(80);
 
   private double m_ExtendedLinearArmRadians = Units.degreesToRadians(-720);
-  private double m_PickupLinearArmRadians = Units.degreesToRadians(-462);
-  private double m_retractedLinearArmRadians = Units.degreesToRadians(0);
+  private double m_PickupLinearArmRadians = Units.degreesToRadians(-434);
+  private double m_L4LinearArmRadians = Units.degreesToRadians(-622);
+  private double m_RetractedLinearArmRadians = Units.degreesToRadians(0);
 
   private final double m_MinWristRadians = Units.degreesToRadians(-180);
   private final double m_MaxWristRadians = Units.degreesToRadians(180);
@@ -116,8 +117,12 @@ public class ArmSubsystem extends SubsystemBase {
     return Units.radiansToDegrees(m_PickupLinearArmRadians);
   }
 
+  public double getL4LinearArmDegrees() {
+    return Units.radiansToDegrees(m_L4LinearArmRadians);
+  }
+
   public double getRetractedLinearArmDegrees() {
-    return Units.radiansToDegrees(m_retractedLinearArmRadians);
+    return Units.radiansToDegrees(m_RetractedLinearArmRadians);
   }
 
   public double getLinearArmDegrees() {
@@ -150,12 +155,14 @@ public class ArmSubsystem extends SubsystemBase {
     if (Math.abs(degrees) > 0.05) {
       m_RotateArmTargetRadians += Units.degreesToRadians(degrees);
 
-      m_retractedLinearArmRadians += Units.degreesToRadians(degrees);
+      m_RetractedLinearArmRadians += Units.degreesToRadians(degrees);
+      m_PickupLinearArmRadians += Units.degreesToRadians(degrees);
+      m_L4LinearArmRadians += Units.degreesToRadians(degrees);
       m_ExtendedLinearArmRadians += Units.degreesToRadians(degrees);
       m_LinearArmTargetRadians += Units.degreesToRadians(degrees);
 
       if (m_RotateArmTargetRadians >= m_MaxRotateZoneRadians || m_RotateArmTargetRadians <= m_MinRotateZoneRadians) {
-        m_LinearArmTargetRadians = m_retractedLinearArmRadians;
+        m_LinearArmTargetRadians = m_RetractedLinearArmRadians;
       } 
     }
     setReferencePeriodic();
@@ -168,13 +175,14 @@ public class ArmSubsystem extends SubsystemBase {
 
     m_RotateArmTargetRadians = newRadians;
 
-    m_retractedLinearArmRadians += adjRadians;
+    m_RetractedLinearArmRadians += adjRadians;
     m_PickupLinearArmRadians += adjRadians;
+    m_L4LinearArmRadians += adjRadians;
     m_ExtendedLinearArmRadians += adjRadians;
     m_LinearArmTargetRadians += adjRadians;
 
     if (m_RotateArmTargetRadians >= m_MaxRotateZoneRadians || m_RotateArmTargetRadians <= m_MinRotateZoneRadians) {
-      m_LinearArmTargetRadians = m_retractedLinearArmRadians;
+      m_LinearArmTargetRadians = m_RetractedLinearArmRadians;
     } 
 
     setReferencePeriodic();
@@ -188,8 +196,18 @@ public class ArmSubsystem extends SubsystemBase {
     setReferencePeriodic();
   }
 
-  public void moveLinearArm(double degrees) {
-    m_LinearArmTargetRadians = Units.degreesToRadians(degrees);
+  public void moveLinearArmRetracted() {
+    m_LinearArmTargetRadians = m_RetractedLinearArmRadians;
+    setReferencePeriodic();
+  }
+
+  public void moveLinearArmPickup() {
+    m_LinearArmTargetRadians = m_PickupLinearArmRadians;
+    setReferencePeriodic();
+  }
+
+  public void moveLinearArmL4() {
+    m_LinearArmTargetRadians = m_L4LinearArmRadians;
     setReferencePeriodic();
   }
 
@@ -209,7 +227,7 @@ public class ArmSubsystem extends SubsystemBase {
   // Private methods
   private void setReferencePeriodic() {
     m_RotateArmTargetRadians = MathUtil.clamp(m_RotateArmTargetRadians, m_MinRotateArmRadians, m_MaxRotateArmRadians);
-    m_LinearArmTargetRadians = MathUtil.clamp(m_LinearArmTargetRadians, m_ExtendedLinearArmRadians, m_retractedLinearArmRadians);
+    m_LinearArmTargetRadians = MathUtil.clamp(m_LinearArmTargetRadians, m_ExtendedLinearArmRadians, m_RetractedLinearArmRadians);
     m_WristTargetRadians = MathUtil.clamp(m_WristTargetRadians, m_MinWristRadians, m_MaxWristRadians);
 
     m_RotateArmController.setReference(m_RotateArmTargetRadians, ControlType.kPosition);

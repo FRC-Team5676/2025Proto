@@ -20,14 +20,25 @@ public class ArmMoveCommands extends Command {
         addRequirements(ballScrew, arm);
     }
 
+    public Command moveToZero() {
+        return Commands.sequence(
+            Commands.parallel(
+                new InstantCommand(() -> m_Arm.moveRotateArm(0)),
+                new InstantCommand(() -> m_Arm.moveLinearArmRetracted()),
+                new InstantCommand(() -> m_Arm.moveWrist(0))
+            ),
+            Commands.waitSeconds(0.5),
+            new InstantCommand(() -> m_BallScrew.moveToDownPosition())
+        );
+    }
+
     public Command moveToHome() {
         return Commands.sequence(
             Commands.parallel(
                 new InstantCommand(() -> m_Arm.moveRotateArm(-28)),
+                new InstantCommand(() -> m_Arm.moveLinearArmPickup()),
                 new InstantCommand(() -> m_Arm.moveWrist(90))
             ),
-            Commands.waitSeconds(0.5),
-            new InstantCommand(() -> m_Arm.moveLinearArm(m_Arm.getPickupLinearArmDegrees())),
             Commands.waitSeconds(0.5),
             new InstantCommand(() -> m_BallScrew.moveToDownPosition())
         );
@@ -61,7 +72,7 @@ public class ArmMoveCommands extends Command {
             Commands.waitSeconds(1),
             Commands.parallel(
                 new InstantCommand(() -> m_Arm.moveRotateArm(-160)),
-                new InstantCommand(() -> m_Arm.moveLinearArm(-782)),
+                new InstantCommand(() -> m_Arm.moveLinearArmL4()),
                 new InstantCommand(() -> m_Arm.moveWrist(-135))
             )
         );
