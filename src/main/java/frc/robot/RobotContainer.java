@@ -99,12 +99,12 @@ public class RobotContainer {
         // Variable Position Commands
         climber.setDefaultCommand(new DefaultClimberCommand(climber, driver));
         arm.setDefaultCommand(new DefaultArmCommand(arm, operator));
-        ballScrew.setDefaultCommand(new DefaultBallScrewCommand(ballScrew, operator));
+        //ballScrew.setDefaultCommand(new DefaultBallScrewCommand(ballScrew, operator));
         //tray.setDefaultCommand(new DefaultTrayCommand(tray, operator));
 
         // Ball Screw
-        //operator.button(XboxController.Button.kLeftBumper.value).onTrue(new InstantCommand(ballScrew::moveToDownPosition));
-        //operator.button(XboxController.Button.kRightBumper.value).onTrue(new InstantCommand(ballScrew::moveToUpPosition));
+        operator.button(XboxController.Button.kLeftBumper.value).onTrue(new InstantCommand(ballScrew::moveToDownPosition));
+        operator.button(XboxController.Button.kRightBumper.value).onTrue(new InstantCommand(ballScrew::moveToUpPosition));
 
         // Tray
         operator.povUp().onFalse(new InstantCommand(tray::moveToUpPosition));
