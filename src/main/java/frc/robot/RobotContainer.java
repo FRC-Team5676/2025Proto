@@ -10,6 +10,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -64,12 +65,13 @@ public class RobotContainer {
     /* Path follower */
     // private final SendableChooser<Command> autoChooser;
 
-    public RobotContainer() {
+     public RobotContainer() {
         // autoChooser = AutoBuilder.buildAutoChooser("Tests");
         // SmartDashboard.putData("Auto Mode", autoChooser);
 
         configureBindings();
     }
+        
 
     private void configureBindings() {
 
@@ -134,7 +136,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         /* Run the path selected from the auto chooser */
-        return new PathPlannerAuto("Auto-1");
+        return new PathPlannerAuto("Coral Top Right"); ///////////////////// Rename for auto //////////// add auto chooser in shuffleboard
         // return autoChooser.getSelected();
     }
 }
