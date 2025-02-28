@@ -164,11 +164,8 @@ public class ArmSubsystem extends SubsystemBase {
       m_L4LinearArmRadians += Units.degreesToRadians(degrees);
       m_ExtendedLinearArmRadians += Units.degreesToRadians(degrees);
       m_LinearArmTargetRadians += Units.degreesToRadians(degrees);
-
-      if (m_RotateArmTargetRadians >= m_MaxRotateZoneRadians || m_RotateArmTargetRadians <= m_MinRotateZoneRadians) {
-        m_LinearArmTargetRadians = m_RetractedLinearArmRadians;
-      } 
     }
+
     setReferencePeriodic();
   }
 
@@ -186,10 +183,6 @@ public class ArmSubsystem extends SubsystemBase {
     m_L4LinearArmRadians += adjRadians;
     m_ExtendedLinearArmRadians += adjRadians;
     m_LinearArmTargetRadians += adjRadians;
-
-    if (m_RotateArmTargetRadians >= m_MaxRotateZoneRadians || m_RotateArmTargetRadians <= m_MinRotateZoneRadians) {
-      m_LinearArmTargetRadians = m_RetractedLinearArmRadians;
-    } 
 
     setReferencePeriodic();
   }
@@ -243,7 +236,13 @@ public class ArmSubsystem extends SubsystemBase {
   // Private methods
   private void setReferencePeriodic() {
     m_RotateArmTargetRadians = MathUtil.clamp(m_RotateArmTargetRadians, m_MinRotateArmRadians, m_MaxRotateArmRadians);
-    m_LinearArmTargetRadians = MathUtil.clamp(m_LinearArmTargetRadians, m_ExtendedLinearArmRadians, m_RetractedLinearArmRadians);
+
+    if (m_RotateArmTargetRadians >= m_MaxRotateZoneRadians || m_RotateArmTargetRadians <= m_MinRotateZoneRadians) {
+      m_LinearArmTargetRadians = MathUtil.clamp(m_LinearArmTargetRadians, m_RetractedLinearArmRadians, m_RetractedLinearArmRadians);
+    } else {
+      m_LinearArmTargetRadians = MathUtil.clamp(m_LinearArmTargetRadians, m_ExtendedLinearArmRadians, m_RetractedLinearArmRadians);
+    }
+
     m_WristTargetRadians = MathUtil.clamp(m_WristTargetRadians, m_MinWristRadians, m_MaxWristRadians);
 
     m_RotateArmController.setReference(m_RotateArmTargetRadians, ControlType.kPosition);
