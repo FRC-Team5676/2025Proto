@@ -50,8 +50,8 @@ public class ArmSubsystem extends SubsystemBase {
   private final double m_MaxRotateArmRadians = Units.degreesToRadians(270);
   private final double m_MinUpRotateZoneRadians = Units.degreesToRadians(-190);
   private final double m_MaxUpRotateZoneRadians = Units.degreesToRadians(80);
-  private final double m_MinDownRotateZoneRadians = Units.degreesToRadians(-100);
-  private final double m_MaxDownRotateZoneRadians = Units.degreesToRadians(170);
+  private final double m_MinDownRotateZoneRadians = Units.degreesToRadians(-145);
+  private final double m_MaxDownRotateZoneRadians = Units.degreesToRadians(125);
 
   private double m_ExtendedLinearArmRadians = Units.degreesToRadians(-720);
   private double m_PickupLinearArmRadians = Units.degreesToRadians(-542);
@@ -244,7 +244,7 @@ public class ArmSubsystem extends SubsystemBase {
   private void setReferencePeriodic() {
     m_RotateArmTargetRadians = MathUtil.clamp(m_RotateArmTargetRadians, m_MinRotateArmRadians, m_MaxRotateArmRadians);
 
-    if ((m_BallScrew.belowMidPosition()
+    if ((m_BallScrew.atDownPosition()
         // Ball Screw is Down
         && (m_RotateArmTargetRadians >= m_MaxDownRotateZoneRadians || m_RotateArmTargetRadians <= m_MinDownRotateZoneRadians))
         ||
