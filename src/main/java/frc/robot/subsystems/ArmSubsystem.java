@@ -17,6 +17,8 @@ import frc.robot.utils.ShuffleboardContent;
 
 public class ArmSubsystem extends SubsystemBase {
 
+  private BallScrewSubsystem m_BallScrew;
+
   private double m_RotateArmTargetRadians;
   private double m_LinearArmTargetRadians;
   private double m_WristTargetRadians;
@@ -25,7 +27,7 @@ public class ArmSubsystem extends SubsystemBase {
   private static final double kRotateArmPositionFactor = (2 * Math.PI) / kRotateArmGearRatio;
   private static final double kLinearArmGearRatio = 20 / 1;
   private static final double kLinearArmPositionFactor = (2 * Math.PI) / kLinearArmGearRatio;
-  private static final double kWristGearRatio = 2/1;
+  private static final double kWristGearRatio = 2 / 1;
   private static final double kWristPositionFactor = (2 * Math.PI) / kWristGearRatio;
 
   private final int m_RotateArmCanId = 52;
@@ -46,8 +48,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   private final double m_MinRotateArmRadians = Units.degreesToRadians(-270);
   private final double m_MaxRotateArmRadians = Units.degreesToRadians(270);
-  private final double m_MinRotateZoneRadians = Units.degreesToRadians(-190);
-  private final double m_MaxRotateZoneRadians = Units.degreesToRadians(80);
+  private final double m_MinUpRotateZoneRadians = Units.degreesToRadians(-190);
+  private final double m_MaxUpRotateZoneRadians = Units.degreesToRadians(80);
+  private final double m_MinDownRotateZoneRadians = Units.degreesToRadians(-100);
+  private final double m_MaxDownRotateZoneRadians = Units.degreesToRadians(170);
 
   private double m_ExtendedLinearArmRadians = Units.degreesToRadians(-720);
   private double m_PickupLinearArmRadians = Units.degreesToRadians(-542);
@@ -59,7 +63,10 @@ public class ArmSubsystem extends SubsystemBase {
   private final double m_MinWristRadians = Units.degreesToRadians(-180);
   private final double m_MaxWristRadians = Units.degreesToRadians(180);
 
-  public ArmSubsystem() {
+  public ArmSubsystem(BallScrewSubsystem ballScrew) {
+
+    m_BallScrew = ballScrew;
+
     // Motor setup
     m_RotateArmMotor = new SparkMax(m_RotateArmCanId, MotorType.kBrushless);
     m_LinearArmMotor = new SparkMax(m_LinearArmCanId, MotorType.kBrushless);
@@ -237,10 +244,18 @@ public class ArmSubsystem extends SubsystemBase {
   private void setReferencePeriodic() {
     m_RotateArmTargetRadians = MathUtil.clamp(m_RotateArmTargetRadians, m_MinRotateArmRadians, m_MaxRotateArmRadians);
 
-    if (m_RotateArmTargetRadians >= m_MaxRotateZoneRadians || m_RotateArmTargetRadians <= m_MinRotateZoneRadians) {
-      m_LinearArmTargetRadians = MathUtil.clamp(m_LinearArmTargetRadians, m_RetractedLinearArmRadians, m_RetractedLinearArmRadians);
+    if ((m_BallScrew.belowMidPosition()
+        // Ball Screw is Down
+        && (m_RotateArmTargetRadians >= m_MaxDownRotateZoneRadians || m_RotateArmTargetRadians <= m_MinDownRotateZoneRadians))
+        ||
+        // Ball Screw is Up
+        (m_RotateArmTargetRadians >= m_MaxUpRotateZoneRadians || m_RotateArmTargetRadians <= m_MinUpRotateZoneRadians)) {
+          // Fully Retract Linear Arm
+          m_LinearArmTargetRadians = MathUtil.clamp(m_LinearArmTargetRadians, m_RetractedLinearArmRadians, m_RetractedLinearArmRadians);
     } else {
-      m_LinearArmTargetRadians = MathUtil.clamp(m_LinearArmTargetRadians, m_ExtendedLinearArmRadians, m_RetractedLinearArmRadians);
+      // Normal
+      m_LinearArmTargetRadians = MathUtil.clamp(m_LinearArmTargetRadians, m_ExtendedLinearArmRadians,
+          m_RetractedLinearArmRadians);
     }
 
     m_WristTargetRadians = MathUtil.clamp(m_WristTargetRadians, m_MinWristRadians, m_MaxWristRadians);
@@ -254,10 +269,10 @@ public class ArmSubsystem extends SubsystemBase {
     // Config Rotate Arm
     SparkMaxConfig configRotateArm = new SparkMaxConfig();
     configRotateArm.closedLoop
-    .p(3)
-    .i(0)
-    .d(0)
-    .outputRange(-1, 1);
+        .p(3)
+        .i(0)
+        .d(0)
+        .outputRange(-1, 1);
     configRotateArm.encoder.positionConversionFactor(kRotateArmPositionFactor);
     configRotateArm.idleMode(IdleMode.kBrake);
     configRotateArm.smartCurrentLimit(40);
@@ -266,10 +281,10 @@ public class ArmSubsystem extends SubsystemBase {
     // Config Linear Arm
     SparkMaxConfig configLinearArm = new SparkMaxConfig();
     configLinearArm.closedLoop
-    .p(1)
-    .i(0)
-    .d(0)
-    .outputRange(-0.3, 0.3);
+        .p(1)
+        .i(0)
+        .d(0)
+        .outputRange(-0.3, 0.3);
     configLinearArm.encoder.positionConversionFactor(kLinearArmPositionFactor);
     configLinearArm.idleMode(IdleMode.kBrake);
     configLinearArm.smartCurrentLimit(40);
@@ -278,10 +293,10 @@ public class ArmSubsystem extends SubsystemBase {
     // Config Wrist
     SparkMaxConfig configWrist = new SparkMaxConfig();
     configWrist.closedLoop
-    .p(2)
-    .i(0)
-    .d(0)
-    .outputRange(-1, 1);
+        .p(2)
+        .i(0)
+        .d(0)
+        .outputRange(-1, 1);
     configWrist.encoder.positionConversionFactor(kWristPositionFactor);
     configWrist.idleMode(IdleMode.kBrake);
     configWrist.smartCurrentLimit(40);

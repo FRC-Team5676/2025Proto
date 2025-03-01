@@ -42,8 +42,8 @@ public class RobotContainer {
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
                                                                                       // max angular velocity
 
-    private final ArmSubsystem arm = new ArmSubsystem();
     private final BallScrewSubsystem ballScrew = new BallScrewSubsystem();
+    private final ArmSubsystem arm = new ArmSubsystem(ballScrew);
     private final TraySubsystem tray = new TraySubsystem();
     private final ClimberSubsystem climber = new ClimberSubsystem();
     private final RotateAlgaeSubsystem rotateAlgae = new RotateAlgaeSubsystem();
