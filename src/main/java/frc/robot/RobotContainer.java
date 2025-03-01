@@ -138,7 +138,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         /* Run the path selected from the auto chooser */
-        return new PathPlannerAuto("Coral Top Right"); ///////////////////// Rename for auto //////////// add auto chooser in shuffleboard
+        return new PathPlannerAuto("Move Out"); ///////////////////// Rename for auto //////////// add auto chooser in shuffleboard
         // return autoChooser.getSelected();
     }
 }

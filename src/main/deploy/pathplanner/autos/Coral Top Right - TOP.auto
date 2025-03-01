@@ -7,20 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Move Out"
+            "pathName": "Coral Top Right - TOP"
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "L1 coral"
-                }
-              }
-            ]
+            "name": "L1 coral"
           }
         }
       ]
