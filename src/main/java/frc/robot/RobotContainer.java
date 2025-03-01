@@ -28,6 +28,7 @@ import frc.robot.commands.arms.DefaultArmCommand;
 import frc.robot.commands.arms.DefaultBallScrewCommand;
 import frc.robot.commands.climber.DefaultClimberCommand;
 import frc.robot.commands.tray.DefaultTrayCommand;
+import frc.robot.commands.tray.TrayCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BallScrewSubsystem;
@@ -109,6 +110,7 @@ public class RobotContainer {
         // Tray
         operator.povUp().onFalse(new InstantCommand(tray::moveToUpPosition));
         operator.povUp().whileTrue(new InstantCommand(tray::moveToDownPosition));
+        NamedCommands.registerCommand("L1 coral", TrayCommands.dumpTray(tray));
 
         // Move Arms
         operator.button(XboxController.Button.kBack.value).onTrue(armCommands.moveToZero());
