@@ -10,7 +10,7 @@ public class TrayCommands extends Command {
     public static Command dumpTray(TraySubsystem tray) {
         return Commands.sequence(
             new InstantCommand(() -> tray.moveToDownPosition()),
-            Commands.waitSeconds(1),
+            Commands.waitSeconds(10),
             new InstantCommand(() -> tray.moveToUpPosition())
         );
     }
