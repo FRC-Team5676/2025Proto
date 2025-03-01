@@ -57,7 +57,7 @@ public class ArmSubsystem extends SubsystemBase {
   private double m_PickupLinearArmRadians = Units.degreesToRadians(-542);
   private double m_L2LinearArmRadians = Units.degreesToRadians(-3);
   private double m_L3LinearArmRadians = Units.degreesToRadians(-244);
-  private double m_L4LinearArmRadians = Units.degreesToRadians(-622);
+  private double m_L4LinearArmRadians = Units.degreesToRadians(-720);
   private double m_RetractedLinearArmRadians = Units.degreesToRadians(0);
 
   private final double m_MinWristRadians = Units.degreesToRadians(-180);

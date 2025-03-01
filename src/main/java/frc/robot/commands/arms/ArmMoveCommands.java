@@ -85,13 +85,15 @@ public class ArmMoveCommands extends Command {
             Commands.parallel(
                 new InstantCommand(() -> m_Arm.moveRotateArm(-160)),
                 new InstantCommand(() -> m_Arm.moveLinearArmL4()),
-                new InstantCommand(() -> m_Arm.moveWrist(-135))
+                new InstantCommand(() -> m_Arm.moveWrist(-130))
             )
         );
     }
 
     public Command placeL4() {
         return Commands.sequence(
+            new InstantCommand(() -> m_Arm.moveWrist(-135)),
+            Commands.waitSeconds(0.25),
             Commands.parallel(
                 new InstantCommand(() -> m_Arm.moveWrist(-115)),
                 new InstantCommand(() -> m_Arm.moveLinearArmRetracted())
