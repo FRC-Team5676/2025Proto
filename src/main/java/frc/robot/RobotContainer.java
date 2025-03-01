@@ -9,25 +9,18 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.WrapperCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.arms.ArmMoveCommands;
 import frc.robot.commands.arms.DefaultArmCommand;
-import frc.robot.commands.arms.DefaultBallScrewCommand;
 import frc.robot.commands.climber.DefaultClimberCommand;
-import frc.robot.commands.tray.DefaultTrayCommand;
 import frc.robot.commands.tray.TrayCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
@@ -36,6 +29,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.RotateAlgaeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TraySubsystem;
+import frc.robot.utils.AutonManager;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -58,6 +52,7 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
+    private final AutonManager autonManager = new AutonManager();
     private final CommandJoystick driver = new CommandJoystick(0);
     private final CommandXboxController operator = new CommandXboxController(1);
 
@@ -67,13 +62,27 @@ public class RobotContainer {
     // private final SendableChooser<Command> autoChooser;
 
      public RobotContainer() {
-        // autoChooser = AutoBuilder.buildAutoChooser("Tests");
-        // SmartDashboard.putData("Auto Mode", autoChooser);
-
+        addAutonomousChoices();
+        autonManager.displayChoices();
+    
         configureBindings();
     }
         
+    public Command getAutonomousCommand() {
+        return autonManager.getSelected();
+    }
 
+    private void addAutonomousChoices() {
+        autonManager.addDefaultOption("Move Out", new PathPlannerAuto("Move Out"));
+        autonManager.addOption("Coral Bottom Right - BOTTOM", new PathPlannerAuto("Coral Bottom Right - BOTTOM"));
+        autonManager.addOption("Coral Bottom Right - TOP", new PathPlannerAuto("Coral Bottom Right - TOP"));
+        autonManager.addOption("Coral Middle Right - BOTTOM", new PathPlannerAuto("Coral Middle Right - BOTTOM"));
+        autonManager.addOption("Coral Middle Right - TOP", new PathPlannerAuto("Coral Middle Right - TOP"));
+        autonManager.addOption("Coral Top Right - BOTTOM", new PathPlannerAuto("Coral Top Right - BOTTOM"));
+        autonManager.addOption("Coral Top Right - TOP", new PathPlannerAuto("Coral Top Right - TOP"));
+        autonManager.addOption("Verify-1", new PathPlannerAuto("Verify-1"));
+      }
+    
     private void configureBindings() {
 
         var armCommands = new ArmMoveCommands(ballScrew, arm);
@@ -134,11 +143,5 @@ public class RobotContainer {
         operator.povDown().onFalse(new InstantCommand(rotateAlgae::stop));
         driver.button(2).onTrue(new InstantCommand(rotateAlgae::shootAlgea));
         driver.button(2).onFalse(new InstantCommand(rotateAlgae::stop));
-    }
-
-    public Command getAutonomousCommand() {
-        /* Run the path selected from the auto chooser */
-        return new PathPlannerAuto("Move Out"); ///////////////////// Rename for auto //////////// add auto chooser in shuffleboard
-        // return autoChooser.getSelected();
     }
 }
