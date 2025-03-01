@@ -18,4 +18,48 @@ public class AutoCommands extends Command {
         );
     }
 
+    public static Command moveToReefCoralMiddleRightTOP(TraySubsystem tray) {
+        return Commands.sequence(
+            new PathPlannerAuto("Coral Middle Right - TOP"),
+            new InstantCommand(() -> tray.moveToDownPosition()),
+            Commands.waitSeconds(1),
+            new InstantCommand(() -> tray.moveToUpPosition())
+        );
+    }
+
+    public static Command moveToReefCoralBottomRightTOP(TraySubsystem tray) {
+        return Commands.sequence(
+            new PathPlannerAuto("Coral Bottom Right - TOP"),
+            new InstantCommand(() -> tray.moveToDownPosition()),
+            Commands.waitSeconds(1),
+            new InstantCommand(() -> tray.moveToUpPosition())
+        );
+    }
+
+    public static Command moveToReefCoralTopRightBOTTOM(TraySubsystem tray) {
+        return Commands.sequence(
+            new PathPlannerAuto("Coral Top Right - BOTTOM"),
+            new InstantCommand(() -> tray.moveToDownPosition()),
+            Commands.waitSeconds(1),
+            new InstantCommand(() -> tray.moveToUpPosition())
+        );
+    }
+
+    public static Command moveToReefCoralMiddleRightBOTTOM(TraySubsystem tray) {
+        return Commands.sequence(
+            new PathPlannerAuto("Coral Middle Right - BOTTOM"),
+            new InstantCommand(() -> tray.moveToDownPosition()),
+            Commands.waitSeconds(1),
+            new InstantCommand(() -> tray.moveToUpPosition())
+        );
+    }
+
+    public static Command moveToReefCoralBottomRightBOTTOM(TraySubsystem tray) {
+        return Commands.sequence(
+            new PathPlannerAuto("Coral Bottom Right - BOTTOM"),
+            new InstantCommand(() -> tray.moveToDownPosition()),
+            Commands.waitSeconds(1),
+            new InstantCommand(() -> tray.moveToUpPosition())
+        );
+    }
 }

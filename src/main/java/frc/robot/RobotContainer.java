@@ -75,14 +75,12 @@ public class RobotContainer {
 
     private void addAutonomousChoices() {
         autonManager.addDefaultOption("Move Out", new PathPlannerAuto("Move Out"));
-        autonManager.addOption("Coral Bottom Right - BOTTOM", new PathPlannerAuto("Coral Bottom Right - BOTTOM"));
-        autonManager.addOption("Coral Bottom Right - TOP", new PathPlannerAuto("Coral Bottom Right - TOP"));
-        autonManager.addOption("Coral Middle Right - BOTTOM", new PathPlannerAuto("Coral Middle Right - BOTTOM"));
-        autonManager.addOption("Coral Middle Right - TOP", new PathPlannerAuto("Coral Middle Right - TOP"));
-        autonManager.addOption("Coral Top Right - BOTTOM", new PathPlannerAuto("Coral Top Right - BOTTOM"));
-        autonManager.addOption("Coral Top Right - TOP", new PathPlannerAuto("Coral Top Right - TOP"));
-        autonManager.addOption("Verify-1", new PathPlannerAuto("Verify-1"));
-        autonManager.addOption("Test Eric", AutoCommands.moveToReefCoralTopRightTOP(tray));
+        autonManager.addOption("Coral Top Right - TOP", AutoCommands.moveToReefCoralTopRightTOP(tray));
+        autonManager.addOption("Coral Middle Right - TOP", AutoCommands.moveToReefCoralMiddleRightTOP(tray));
+        autonManager.addOption("Coral Bottom Right - TOP", AutoCommands.moveToReefCoralMiddleRightTOP(tray));
+        autonManager.addOption("Coral Top Right - BOTTOM", AutoCommands.moveToReefCoralMiddleRightTOP(tray));
+        autonManager.addOption("Coral Middle Right - BOTTOM", AutoCommands.moveToReefCoralMiddleRightTOP(tray));
+        autonManager.addOption("Coral Bottom Right - BOTTOM", AutoCommands.moveToReefCoralMiddleRightTOP(tray));
       }
     
     private void configureBindings() {
