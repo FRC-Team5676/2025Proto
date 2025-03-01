@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.commands.arms.ArmMoveCommands;
 import frc.robot.commands.arms.DefaultArmCommand;
+import frc.robot.commands.auto.AutoCommands;
 import frc.robot.commands.climber.DefaultClimberCommand;
 import frc.robot.commands.tray.TrayCommands;
 import frc.robot.generated.TunerConstants;
@@ -81,6 +82,7 @@ public class RobotContainer {
         autonManager.addOption("Coral Top Right - BOTTOM", new PathPlannerAuto("Coral Top Right - BOTTOM"));
         autonManager.addOption("Coral Top Right - TOP", new PathPlannerAuto("Coral Top Right - TOP"));
         autonManager.addOption("Verify-1", new PathPlannerAuto("Verify-1"));
+        autonManager.addOption("Test Eric", AutoCommands.moveToReefCoralTopRightTOP(tray));
       }
     
     private void configureBindings() {
