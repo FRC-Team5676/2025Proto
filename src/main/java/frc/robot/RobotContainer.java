@@ -77,10 +77,10 @@ public class RobotContainer {
         autonManager.addDefaultOption("Move Out", new PathPlannerAuto("Move Out"));
         autonManager.addOption("Coral Top Right - TOP", AutoCommands.moveToReefCoralTopRightTOP(tray));
         autonManager.addOption("Coral Middle Right - TOP", AutoCommands.moveToReefCoralMiddleRightTOP(tray));
-        autonManager.addOption("Coral Bottom Right - TOP", AutoCommands.moveToReefCoralMiddleRightTOP(tray));
-        autonManager.addOption("Coral Top Right - BOTTOM", AutoCommands.moveToReefCoralMiddleRightTOP(tray));
-        autonManager.addOption("Coral Middle Right - BOTTOM", AutoCommands.moveToReefCoralMiddleRightTOP(tray));
-        autonManager.addOption("Coral Bottom Right - BOTTOM", AutoCommands.moveToReefCoralMiddleRightTOP(tray));
+        autonManager.addOption("Coral Bottom Right - TOP", AutoCommands.moveToReefCoralBottomRightTOP(tray));
+        autonManager.addOption("Coral Top Right - BOTTOM", AutoCommands.moveToReefCoralTopRightBOTTOM(tray));
+        autonManager.addOption("Coral Middle Right - BOTTOM", AutoCommands.moveToReefCoralMiddleRightBOTTOM(tray));
+        autonManager.addOption("Coral Bottom Right - BOTTOM", AutoCommands.moveToReefCoralBottomRightBOTTOM(tray));
       }
     
     private void configureBindings() {
@@ -119,7 +119,6 @@ public class RobotContainer {
         // Tray
         operator.povUp().onFalse(new InstantCommand(tray::moveToUpPosition));
         operator.povUp().whileTrue(new InstantCommand(tray::moveToDownPosition));
-        NamedCommands.registerCommand("L1 coral", TrayCommands.dumpTray(tray));
 
         // Move Arms
         operator.button(XboxController.Button.kBack.value).onTrue(armCommands.moveToZero());
