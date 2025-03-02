@@ -9,18 +9,6 @@
           "data": {
             "pathName": "Coral Middle Right - TOP"
           }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 5.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L1 coral"
-          }
         }
       ]
     }

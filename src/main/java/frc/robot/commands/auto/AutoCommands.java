@@ -11,7 +11,9 @@ public class AutoCommands extends Command {
 
     public static Command moveToReefCoralTopRightTOP(TraySubsystem tray) {
         return Commands.sequence(
+            new InstantCommand(() -> tray.moveToUpPosition()),
             new PathPlannerAuto("Coral Top Right - TOP"),
+            Commands.waitSeconds(3),
             new InstantCommand(() -> tray.moveToDownPosition()),
             Commands.waitSeconds(1),
             new InstantCommand(() -> tray.moveToUpPosition())
@@ -20,7 +22,9 @@ public class AutoCommands extends Command {
 
     public static Command moveToReefCoralMiddleRightTOP(TraySubsystem tray) {
         return Commands.sequence(
+            new InstantCommand(() -> tray.moveToDownPosition()),
             new PathPlannerAuto("Coral Middle Right - TOP"),
+            Commands.waitSeconds(3),
             new InstantCommand(() -> tray.moveToDownPosition()),
             Commands.waitSeconds(1),
             new InstantCommand(() -> tray.moveToUpPosition())
@@ -29,7 +33,9 @@ public class AutoCommands extends Command {
 
     public static Command moveToReefCoralBottomRightTOP(TraySubsystem tray) {
         return Commands.sequence(
+            new InstantCommand(() -> tray.moveToDownPosition()),
             new PathPlannerAuto("Coral Bottom Right - TOP"),
+            Commands.waitSeconds(3),
             new InstantCommand(() -> tray.moveToDownPosition()),
             Commands.waitSeconds(1),
             new InstantCommand(() -> tray.moveToUpPosition())
@@ -38,7 +44,9 @@ public class AutoCommands extends Command {
 
     public static Command moveToReefCoralTopRightBOTTOM(TraySubsystem tray) {
         return Commands.sequence(
+            new InstantCommand(() -> tray.moveToDownPosition()),
             new PathPlannerAuto("Coral Top Right - BOTTOM"),
+            Commands.waitSeconds(3),
             new InstantCommand(() -> tray.moveToDownPosition()),
             Commands.waitSeconds(1),
             new InstantCommand(() -> tray.moveToUpPosition())
@@ -47,7 +55,9 @@ public class AutoCommands extends Command {
 
     public static Command moveToReefCoralMiddleRightBOTTOM(TraySubsystem tray) {
         return Commands.sequence(
+            new InstantCommand(() -> tray.moveToDownPosition()),
             new PathPlannerAuto("Coral Middle Right - BOTTOM"),
+            Commands.waitSeconds(3),
             new InstantCommand(() -> tray.moveToDownPosition()),
             Commands.waitSeconds(1),
             new InstantCommand(() -> tray.moveToUpPosition())
@@ -56,7 +66,9 @@ public class AutoCommands extends Command {
 
     public static Command moveToReefCoralBottomRightBOTTOM(TraySubsystem tray) {
         return Commands.sequence(
+            new InstantCommand(() -> tray.moveToDownPosition()),
             new PathPlannerAuto("Coral Bottom Right - BOTTOM"),
+            Commands.waitSeconds(3),
             new InstantCommand(() -> tray.moveToDownPosition()),
             Commands.waitSeconds(1),
             new InstantCommand(() -> tray.moveToUpPosition())
