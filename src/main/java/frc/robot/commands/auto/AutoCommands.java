@@ -85,4 +85,16 @@ public class AutoCommands extends Command {
             new InstantCommand(() -> tray.moveToUpPosition())
         );
     }
+
+    public static Command moveToReefMiddleToSide(TraySubsystem tray) {
+        return Commands.sequence(
+            new InstantCommand(() -> tray.moveToUpPosition()),
+            Commands.waitSeconds(9),
+            new PathPlannerAuto("Middle To Side"),
+            Commands.waitSeconds(1),
+            new InstantCommand(() -> tray.moveToDownPosition()),
+            Commands.waitSeconds(1),
+            new InstantCommand(() -> tray.moveToUpPosition())
+        );
+    }
 }

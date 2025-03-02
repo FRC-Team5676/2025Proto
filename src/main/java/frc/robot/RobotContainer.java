@@ -72,6 +72,7 @@ public class RobotContainer {
     }
 
     private void addAutonomousChoices() {
+        autonManager.addDefaultOption("Middle To Side", AutoCommands.moveToReefMiddleToSide(tray));
         autonManager.addDefaultOption("Middle", AutoCommands.moveToReefMiddle(tray));
         autonManager.addOption("Left", AutoCommands.moveToReefCoralTopRightTOP(tray));
         autonManager.addOption("Right", AutoCommands.moveToReefCoralBottomRightBOTTOM(tray));
