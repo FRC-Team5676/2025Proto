@@ -72,13 +72,10 @@ public class RobotContainer {
     }
 
     private void addAutonomousChoices() {
-        autonManager.addDefaultOption("Move Out", new PathPlannerAuto("Move Out"));
-        autonManager.addOption("Coral Top Right - TOP", AutoCommands.moveToReefCoralTopRightTOP(tray));
-        autonManager.addOption("Coral Middle Right - TOP", AutoCommands.moveToReefCoralMiddleRightTOP(tray));
-        autonManager.addOption("Coral Bottom Right - TOP", AutoCommands.moveToReefCoralBottomRightTOP(tray));
-        autonManager.addOption("Coral Top Right - BOTTOM", AutoCommands.moveToReefCoralTopRightBOTTOM(tray));
-        autonManager.addOption("Coral Middle Right - BOTTOM", AutoCommands.moveToReefCoralMiddleRightBOTTOM(tray));
-        autonManager.addOption("Coral Bottom Right - BOTTOM", AutoCommands.moveToReefCoralBottomRightBOTTOM(tray));
+        autonManager.addDefaultOption("Middle", AutoCommands.moveToReefMiddle(tray));
+        autonManager.addOption("Left", AutoCommands.moveToReefCoralTopRightTOP(tray));
+        autonManager.addOption("Right", AutoCommands.moveToReefCoralBottomRightBOTTOM(tray));
+        
       }
     
     private void configureBindings() {
