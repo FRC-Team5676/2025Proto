@@ -83,7 +83,7 @@ public class ArmMoveCommands extends Command {
             new InstantCommand(() -> m_BallScrew.moveToUpPosition()),
             Commands.waitSeconds(1),
             Commands.parallel(
-                new InstantCommand(() -> m_Arm.moveRotateArm(-160)),
+                new InstantCommand(() -> m_Arm.moveRotateArm(-160.5)),
                 new InstantCommand(() -> m_Arm.moveLinearArmL4()),
                 new InstantCommand(() -> m_Arm.moveWrist(-140))
             )
