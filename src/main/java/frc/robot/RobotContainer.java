@@ -9,7 +9,6 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
-import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,7 +21,6 @@ import frc.robot.commands.arms.ArmMoveCommands;
 import frc.robot.commands.arms.DefaultArmCommand;
 import frc.robot.commands.auto.AutoCommands;
 import frc.robot.commands.climber.DefaultClimberCommand;
-import frc.robot.commands.tray.TrayCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BallScrewSubsystem;
