@@ -19,12 +19,6 @@ public class AutoCommands extends Command {
         );
     }
 
-    public static Command moveMiddle() {
-        return Commands.sequence(
-            new PathPlannerAuto("Middle")
-        );
-    }
-
     public static Command moveMiddleToSide() {
         return Commands.sequence(
             new PathPlannerAuto("Middle To Side")
