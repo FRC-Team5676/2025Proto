@@ -4,97 +4,36 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.TraySubsystem;
 
 public class AutoCommands extends Command {
 
-    public static Command moveToReefCoralTopRightTOP(TraySubsystem tray) {
+    public static Command moveLeft() {
         return Commands.sequence(
-            new InstantCommand(() -> tray.moveToUpPosition()),
-            new PathPlannerAuto("Coral Top Right - TOP"),
-            Commands.waitSeconds(3),
-            new InstantCommand(() -> tray.moveToDownPosition()),
-            Commands.waitSeconds(1),
-            new InstantCommand(() -> tray.moveToUpPosition())
+            new PathPlannerAuto("Left")
         );
     }
 
-    public static Command moveToReefCoralMiddleRightTOP(TraySubsystem tray) {
+    public static Command moveRight() {
         return Commands.sequence(
-            new InstantCommand(() -> tray.moveToUpPosition()),
-            new PathPlannerAuto("Coral Middle Right - TOP"),
-            Commands.waitSeconds(3),
-            new InstantCommand(() -> tray.moveToDownPosition()),
-            Commands.waitSeconds(1),
-            new InstantCommand(() -> tray.moveToUpPosition())
+            new PathPlannerAuto("Right")
         );
     }
 
-    public static Command moveToReefCoralBottomRightTOP(TraySubsystem tray) {
+    public static Command moveMiddle() {
         return Commands.sequence(
-            new InstantCommand(() -> tray.moveToUpPosition()),
-            new PathPlannerAuto("Coral Bottom Right - TOP"),
-            Commands.waitSeconds(3),
-            new InstantCommand(() -> tray.moveToDownPosition()),
-            Commands.waitSeconds(1),
-            new InstantCommand(() -> tray.moveToUpPosition())
+            new PathPlannerAuto("Middle")
         );
     }
 
-    public static Command moveToReefCoralTopRightBOTTOM(TraySubsystem tray) {
+    public static Command moveMiddleToSide() {
         return Commands.sequence(
-            new InstantCommand(() -> tray.moveToUpPosition()),
-            new PathPlannerAuto("Coral Top Right - BOTTOM"),
-            Commands.waitSeconds(3),
-            new InstantCommand(() -> tray.moveToDownPosition()),
-            Commands.waitSeconds(1),
-            new InstantCommand(() -> tray.moveToUpPosition())
+            new PathPlannerAuto("Middle To Side")
         );
     }
 
-    public static Command moveToReefCoralMiddleRightBOTTOM(TraySubsystem tray) {
+    public static Command moveOut() {
         return Commands.sequence(
-            new InstantCommand(() -> tray.moveToUpPosition()),
-            new PathPlannerAuto("Coral Middle Right - BOTTOM"),
-            Commands.waitSeconds(3),
-            new InstantCommand(() -> tray.moveToDownPosition()),
-            Commands.waitSeconds(1),
-            new InstantCommand(() -> tray.moveToUpPosition())
-        );
-    }
-
-    public static Command moveToReefCoralBottomRightBOTTOM(TraySubsystem tray) {
-        return Commands.sequence(
-            new InstantCommand(() -> tray.moveToUpPosition()),
-            new PathPlannerAuto("Coral Bottom Right - BOTTOM"),
-            Commands.waitSeconds(3),
-            new InstantCommand(() -> tray.moveToDownPosition()),
-            Commands.waitSeconds(1),
-            new InstantCommand(() -> tray.moveToUpPosition())
-        );
-    }
-
-    public static Command moveToReefMiddle(TraySubsystem tray) {
-        return Commands.sequence(
-            new InstantCommand(() -> tray.moveToUpPosition()),
-            new PathPlannerAuto("Middle"),
-            Commands.waitSeconds(3),
-            new InstantCommand(() -> tray.moveToDownPosition()),
-            Commands.waitSeconds(1),
-            new InstantCommand(() -> tray.moveToUpPosition())
-        );
-    }
-
-    public static Command moveToReefMiddleToSide(TraySubsystem tray) {
-        return Commands.sequence(
-            new InstantCommand(() -> tray.moveToUpPosition()),
-            Commands.waitSeconds(9),
-            new PathPlannerAuto("Middle To Side"),
-            Commands.waitSeconds(1),
-            new InstantCommand(() -> tray.moveToDownPosition()),
-            Commands.waitSeconds(1),
-            new InstantCommand(() -> tray.moveToUpPosition())
+            new PathPlannerAuto("Move Out")
         );
     }
 }
