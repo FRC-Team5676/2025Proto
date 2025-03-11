@@ -10,6 +10,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
@@ -138,16 +139,23 @@ public class RobotContainer {
     }
 
     private double limelightForward() {
-        // simple proportional ranging control with Limelight's "ty" value
-        // this works best if your Limelight's mount height and target mount height are
-        // different.
-        // if your limelight and target are mounted at the same or similar heights, use
-        // "ta" (area) for target ranging rather than "ty"
-
         double kP = 0.1;
-        double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
+        double currentDistance = estDistForwardMeters(LimelightHelpers.getTY("limelight"));
+        double desiredDistance = Units.inchesToMeters(12);
+
+        double distanceError = desiredDistance - currentDistance;
+        double targetingForwardSpeed = distanceError * kP;
 
         // Drive forward with negative Y (forward)
         return -targetingForwardSpeed * MaxSpeed;
+    }
+
+    private double estDistForwardMeters(double angleDegrees) {
+        double h1 = Units.inchesToMeters(24); // height of the camera
+        double h2 = Units.inchesToMeters(12); // height of the target
+        double a1 = Units.degreesToRadians(0); // angle of the camera
+        double a2 = Units.degreesToRadians(angleDegrees); // angle of the target
+
+        return (h2 - h1) / Math.tan(a1 + a2);
     }
 }
