@@ -151,6 +151,9 @@ public class RobotContainer {
     }
 
     private double estDistForwardMeters(double angleDegrees) {
+        // d = (h2-h1) / tan(a1+a2)
+        // https://docs.limelightvision.io/docs/docs-limelight/tutorials/tutorial-estimating-distance
+        
         double h1 = Units.inchesToMeters(24); // height of the camera
         double h2 = Units.inchesToMeters(12); // height of the target
         double a1 = Units.degreesToRadians(0); // angle of the camera
