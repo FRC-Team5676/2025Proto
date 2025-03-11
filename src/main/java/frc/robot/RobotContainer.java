@@ -12,9 +12,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.commands.auto.AutoCommands;
@@ -24,27 +22,19 @@ import frc.robot.utils.AutonManager;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
-                                                                                      // max angular velocity
+    private double MaxAngularRate = RotationsPerSecond.of(1.5).in(RadiansPerSecond); // 1.5 rotations per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-        .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.35) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    //private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-    //private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final AutonManager autonManager = new AutonManager();
     private final CommandJoystick driver = new CommandJoystick(0);
-    private final CommandXboxController operator = new CommandXboxController(1);
 
     public final SwerveSubsystem drivetrain = TunerConstants.createDrivetrain();
-
-    /* Path follower */
-    // private final SendableChooser<Command> autoChooser;
 
      public RobotContainer() {
         addAutonomousChoices();
@@ -70,11 +60,10 @@ public class RobotContainer {
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
                 // Drivetrain will execute this command periodically
-                drivetrain.applyRequest(() -> drive.withVelocityX(-driver.getY() * MaxSpeed) // Drive forward with
-                                                                                                 // negative Y (forward)
-                        .withVelocityY(-driver.getX() * MaxSpeed) // Drive left with negative X (left)
-                        .withRotationalRate(-driver.getTwist() * MaxAngularRate) // Drive counterclockwise with
-                                                                                  // negative X (left)
+                drivetrain.applyRequest(() -> drive
+                    .withVelocityX(getY())
+                    .withVelocityY(getX())
+                    .withRotationalRate(getTwist())
                 ));
 
         drivetrain.registerTelemetry(logger::telemeterize);
@@ -84,6 +73,48 @@ public class RobotContainer {
 
         // Reset the field-centric heading
         driver.button(8).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+    }
 
+    private double getX() {
+        double xDeadband = 0.1;
+        double x = -driver.getX(); // Drive left with negative X (left)
+        
+        if (Math.abs(x) < xDeadband) {
+            return 0;
+        } else {
+            return (1 / (1 - xDeadband)) * (x + (-Math.signum(x) * xDeadband)) * MaxSpeed;
+        }
+    }
+
+    private double getY() {
+        double xDeadband = 0.1;
+        double y = -driver.getY(); // Drive forward with negative Y (forward)
+        
+        if (Math.abs(y) < xDeadband) {
+            return 0;
+        } else {
+            return (1 / (1 - xDeadband)) * (y + (-Math.signum(y) * xDeadband)) * MaxSpeed;
+        }
+    }
+
+    private double getTwist() {
+        double deadband;
+        double twist = -driver.getTwist(); // Drive counterclockwise with negative twist (CCW)
+        
+        if (Math.signum(twist) < 0) {
+            // CCW
+            deadband = 0.7; // larger on this side because of joystick sensitivity on CCW rotation
+        } else if (Math.signum(twist) > 0) {
+            // CW
+            deadband = 0.1;
+        } else {
+            return 0;
+        }
+
+        if (Math.abs(twist) < deadband) {
+            return 0;
+        } else {
+            return (1 / (1 - deadband)) * (twist + (-Math.signum(twist) * deadband)) * MaxAngularRate;
+        }
     }
 }
