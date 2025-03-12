@@ -21,7 +21,7 @@ import frc.robot.utils.AutonManager;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(1.5).in(RadiansPerSecond); // 1.5 rotations per second max
+    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 0.75 rotations per second max
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric driveField = new SwerveRequest.FieldCentric()
@@ -105,19 +105,24 @@ public class RobotContainer {
         double deadband;
         double value = -driver.getTwist(); // Drive counterclockwise with negative twist (CCW)
 
+        // x = Axis 4: 1 bottom to -1 top
+        // translate to 1 bottom to 2 top using formula
+        // y = -0.5x + 1.5
+        double multiplier = -0.5 * driver.getRawAxis(4) + 1.5;
+
         if (Math.signum(value) <= 0) {
             // CCW
-            deadband = 0.7; // larger on this side because of joystick sensitivity on CCW rotation
+            deadband = 0.5; // larger on this side because of joystick sensitivity on CCW rotation
         } else if (Math.signum(value) > 0) {
             // CW
-            deadband = 0.1;
+            deadband = 0.0;
         } else {
             return 0;
         }
 
         value = MathUtil.applyDeadband(value, deadband);
         value = Math.signum(value) * Math.pow(value, 2);
-        return value * MaxAngularRate;
+        return value * MaxAngularRate * multiplier;
     }
 
     private double limelightRotation() {
@@ -153,7 +158,7 @@ public class RobotContainer {
     private double estDistForwardMeters(double angleDegrees) {
         // d = (h2-h1) / tan(a1+a2)
         // https://docs.limelightvision.io/docs/docs-limelight/tutorials/tutorial-estimating-distance
-        
+
         double h1 = Units.inchesToMeters(24); // height of the camera
         double h2 = Units.inchesToMeters(12); // height of the target
         double a1 = Units.degreesToRadians(0); // angle of the camera
