@@ -69,7 +69,7 @@ public class RobotContainer {
         driver.button(2).whileTrue(
                 drivetrain.applyRequest(() -> driveRobot
                         .withVelocityX(limelightForward())
-                        .withVelocityY(getX())
+                        .withVelocityY(limelightSideToSide())
                         .withRotationalRate(limelightRotation())));
 
         // Robot centric driving
@@ -145,25 +145,49 @@ public class RobotContainer {
 
     private double limelightForward() {
         double kP = 0.1;
-        double currentDistance = estDistForwardMeters(LimelightHelpers.getTY("limelight"));
+        double currentDistance = DistanceToTargetForward();
         double desiredDistance = Units.inchesToMeters(12);
 
         double distanceError = desiredDistance - currentDistance;
-        double targetingForwardSpeed = distanceError * kP;
+        double forwardSpeed = distanceError * kP;
 
         // Drive forward with negative Y (forward)
-        return -targetingForwardSpeed * MaxSpeed;
+        return -forwardSpeed * MaxSpeed;
     }
 
-    private double estDistForwardMeters(double angleDegrees) {
+    private double DistanceToTargetForward() {
         // d = (h2-h1) / tan(a1+a2)
         // https://docs.limelightvision.io/docs/docs-limelight/tutorials/tutorial-estimating-distance
 
         double h1 = Units.inchesToMeters(24); // height of the camera
         double h2 = Units.inchesToMeters(12); // height of the target
-        double a1 = Units.degreesToRadians(0); // angle of the camera
-        double a2 = Units.degreesToRadians(angleDegrees); // angle of the target
+        double a1 = Units.degreesToRadians(0); // y angle of the camera
+        double a2 = Units.degreesToRadians(LimelightHelpers.getTY("limelight")); // y angle of the target
 
         return (h2 - h1) / Math.tan(a1 + a2);
+    }
+
+    private double limelightSideToSide() {
+        double kP = 0.1;
+        double currentDistance = DistanceToTargetSideToSide();
+        double desiredDistance = Units.inchesToMeters(0);
+
+        double distanceError = desiredDistance - currentDistance;
+        double sideSpeed = distanceError * kP;
+
+        // Drive left with negative X (left)
+        return -sideSpeed * MaxSpeed;
+    }
+
+    private double DistanceToTargetSideToSide() {
+        // h2 = h1 + d * tan(a1 + a2)
+        // https://docs.limelightvision.io/docs/docs-limelight/tutorials/tutorial-estimating-distance
+
+        double h1 = Units.inchesToMeters(0); // side offset of the camera
+        double d = DistanceToTargetForward(); // distance forward to the target
+        double a1 = Units.degreesToRadians(0); // x angle of the camera
+        double a2 = Units.degreesToRadians(LimelightHelpers.getTX("limelight")); // x angle of the target
+
+        return h1 + d * Math.tan(a1 + a2);
     }
 }
