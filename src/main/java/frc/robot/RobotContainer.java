@@ -66,7 +66,7 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
 
         // Limelight driving
-        driver.button(2).whileTrue(
+        driver.button(1).whileTrue(
                 drivetrain.applyRequest(() -> driveRobot
                         .withVelocityX(limelightForward())
                         .withVelocityY(limelightSideToSide())
